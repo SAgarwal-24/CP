@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+
+#define hh cout << endl
+
+int32_t main(){
+
+int tc=1;
+cin>>tc;
+while(tc--){
+   int n,m,i,j,cnt=0,ans=0;
+
+   string x,y;  cin>>x>>y;
+
+   m=x.size();
+   n=y.size();
+
+   if(m>n){
+       cout<<0; hh; continue;
+   }
+
+   int lo=0, hi=n/m;
+  
+
+   while(lo<=hi){
+       
+       int mid=lo+(hi-lo)/2;
+       // check x^mid as subsequence in y 
+       j=0,cnt=mid;
+       for(i=0;j<m and i<n;i++){
+           if(x[j]==y[i])cnt--;
+
+           if(cnt==0)cnt=mid,j++;
+       }
+
+     
+       if(j==0 || j==m){
+           ans=mid;
+           lo=mid+1;
+       }
+       else{
+           hi=mid-1;
+       }
+
+     
+
+   }
+   
+   cout<<ans; hh;
+   
+}
+return 0;
+}
+
+
+/*
+Testcases
+
+input
+4
+abc
+aaaabbbbcccc
+abcd 
+aaabababdddcacacaddbbbbbcccccaddddd
+abcd
+abcacacxxxxxxxxaaabbbcccddd
+xyzw
+xyxyxyzzzqqqwxxxxy
+
+
+output
+4
+5
+3
+1
+
+*/
