@@ -1,0 +1,141 @@
+/*
+https://codeforces.com/contest/1516/problem/C
+
+C. Baby Ehab Partitions Again
+
+-> DP + bit manipulation logic (find LSB on)
+-> Knapsack was involved to check equal parition of array into 2 subsequence
+
+-> We have to make sure that array is not divisible into 2 subsequences with equal sum
+
+-> TRICK : To think of cases => We can make cases and understand this problem mathematically 
+                                by observing the sum of array and odd element is their or not
+
+          CASE 1: if sum is odd (easisest case ie ans=0 no headache)
+          CASE 2: if sum is even
+                    but we can't divide array with equal sum subsequence
+                   (eg a[]={2,8,16} their is no way we can do equal partition)
+                  this is easy to check by dp
+         
+          CASE 3: if sum is even
+                  but their is odd element so remove it
+                  so that resulting_sum is odd and in this way
+                  CASE 3 becomes CASE 1 again
+
+          CASE 4: if sum is even
+                  and all elements are even
+                  find element with LSB on and remove it 
+
+*/
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+#define hh cout << endl
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+
+int32_t main(){
+fast
+
+    int n,i,j,sum=0, od=-1;
+    cin>>n;
+
+    int a[n];
+
+    for(i=0;i<n;i++)
+    {
+        cin>>a[i];  
+        sum+=a[i];
+
+        if(od==-1 and (a[i]&1)==1)od=i;
+    }
+
+    //watch(sum);
+
+    if(sum&1){ // Array is already good ie can't be divisible in equal parts
+        cout<<0; // So no operations needed
+        return 0;
+    }
+
+    sum=sum/2;
+    int knapsack[sum+1]={0};
+    knapsack[0]=1;
+
+    for(i=0;i<n;i++){
+        for(j=sum;j>=a[i];j--){
+            knapsack[j]=max(knapsack[j],knapsack[j-a[i]]);
+        }
+    }
+
+
+    if(knapsack[sum]==0){  // Array is already good ie can't be divisible in equal parts
+        cout<<0;  // So no operations needed
+        return 0;
+    }
+
+   // watch(od);
+    if(od!=-1){  //odd element exists so remove it 
+        cout<<1<<endl;  // only 1 operation needed
+        cout<<od+1<<endl;
+        return 0;
+    }
+
+
+    // We reach here means all elements are even 
+    // so remove element with lsb ie divide elements by 2 ie rescaling them acc. to editorial
+    //int mi=a[0];
+    int ind=1;
+    bool ok=false;
+
+
+    // since a[i]<=2000 ie a[i]<2048 ie a[i]<(2^11)
+    // so their are atmost 11 bits on
+    // and we need to find no with LSB on 
+    // alter for this portion is keep dividing whole array by 2
+    // untill we get a element odd
+    for(int bit=0;bit<=11;bit++){
+
+        for(i=0;i<n;i++){
+
+            if((a[i]&(1<<bit))){
+               // watch(a[i]);
+                ind=i+1; 
+                ok=true; break;
+            }
+        }
+
+        if(ok)break;
+    }
+
+    /* -------Alternative way to find no with LSB on --- by dividing each time with 2
+    while(true){ // it works bcz n<=100
+        
+        for(i=0;i<n;i++){  
+ 
+            if(a[i]&1){
+                ok=true;  ind=i+1; break;
+            }
+ 
+            a[i]=a[i]/2;
+        }
+ 
+        if(ok)break;
+    }
+    
+    */
+
+
+    cout<<1<<endl;
+    cout<<ind;
+
+
+return 0;
+}
