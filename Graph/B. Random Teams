@@ -1,0 +1,49 @@
+// Acc to editorial we can  realate it  to mesh graph
+// but solvabe by formulating scenarios mathematically 
+// https://codeforces.com/problemset/problem/478/B
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+#define hh cout << endl
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+
+
+int par(int x){
+    
+    return x*(x-1)/2;
+}
+
+int32_t main(){
+fast
+
+int n,m,i,j,k;
+ 
+ cin>>n>>m;
+
+ int mx=n-(m-1);
+
+ // for max pairings 
+ int kmax=mx*(mx-1)/2;  // 1 member to m-1 teams and remaining n-(m-1) members in one team
+
+ int q1=0,q2=0,f1=0,f2=0;
+
+ // for min pairings 
+ q1=n/m; 
+ if(n%m)q2=q1+1;
+ f2=n%m;
+ f1=m-f2;
+
+
+ int kmin = (par(q1)*f1) + (par(q2)*f2);
+
+ cout<<kmin<<" "<<kmax;
+
+return 0;
+
+}
