@@ -1,0 +1,74 @@
+/*
+B. Histogram Ugliness
+https://codeforces.com/contest/1534/problem/B
+
+Greedy proof is important
+1. Notice when we will get net profit  (profit= reduction in outline - cost)
+  ie when 
+    -profit > 0  or  reduction in outline > cost 
+    -which only possible if building at ith position is greater than its neighbour
+
+    - ie a[i]>a[i-1] and a[i]>a[i+1] 
+    => bcz one unit decrease in height  = 2 unit decrease in outline in 1 unit cost 
+      ie profit = decrease in outline - cost
+                = 2 unit - 1unit  
+                = 1 unit > 0
+        
+        so do this for all i such that (a[i]>a[i-1] and a[i]>a[i+1])
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+#define all(c) c.begin(), c.end()
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define see(x) cout << (x) << endl
+#define hh cout << endl
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+
+int32_t main(){
+
+fast
+int tc=1;
+cin>>tc;
+while(tc--){
+   int n,m,i;
+   cin>>n;
+
+   int a[n+2]={0};
+
+   int ans=0;
+   for(i=0;i<n;i++){
+       cin>>a[i+1];    
+   }
+
+   int cost=0;
+   for(i=1;i<=n;i++){
+       if(a[i]>a[i-1] and a[i]>a[i+1]){
+           int smx=max(a[i-1],a[i+1]);
+           cost+=a[i]-smx;
+           a[i]=smx;
+       }
+   }
+
+   
+
+   for(i=1;i<=n+1;i++){
+       ans+=abs(a[i]-a[i-1]);
+   }
+
+//     for(i=1;i<=n;i++){
+//        cout<<a[i]<<" ";    
+//    }
+//    hh;
+
+    ans+=cost;
+
+   cout<<ans<<endl;
+
+}
+return 0;
+}
