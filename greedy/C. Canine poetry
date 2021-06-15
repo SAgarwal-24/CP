@@ -1,0 +1,64 @@
+/*
+https://codeforces.com/contest/1466/problem/C
+C. Canine poetry
+--------
+Greedy Proof to be realized:
+ it is sufficient to ensure that each marked character does not coincide
+ with 4 neighboring characters
+-------
+dp solution is tough to understand
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define all(c) c.begin(), c.end()
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define see(x) cout << (x) << endl
+#define hh cout << endl
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+#define bor cout << "\n---\n";
+
+
+int32_t main()
+{
+
+    fast int tc = 1;
+    cin >> tc;
+    while (tc--)
+    {
+        int n, i;
+        
+        string s,tem; cin>>s;
+        n=s.size();
+        tem=s;
+
+        int cnt=0;
+        for(i=1;i<n;i++){
+
+            //removes 2 length palindrome 
+            // ie s[i-1]s[i] and s[i]s[i+1] 
+            // bcz we put s[i] such a random value that it won't 
+            // coincide with s[i-1] and s[i+1] 
+            // ie s[i]!=s[i-1] and s[i]!=s[i+1] 
+            // and same goes of 3 length palindrome
+            if(s[i-1]!='?' and s[i]==s[i-1]){
+                s[i]='?';
+                cnt++;
+            }
+
+            if(i-2>=0 and s[i-2]!='?' and s[i-2]==s[i]){
+                 s[i]='?';
+                cnt++;
+            }
+        }
+
+        cout<<cnt<<endl;
+    }
+
+        
+    return 0;
+
+
+}
