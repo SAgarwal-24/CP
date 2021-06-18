@@ -1,0 +1,74 @@
+/*
+D. Number into Sequence
+https://codeforces.com/problemset/problem/1454/D
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+
+int big=1e5;
+int has[100001];
+
+void prime(){
+    
+    for(int i=2;i<=big;i++){
+        if(has[i]==0){
+            for(int j=i*i;j<=big;j=j+i){
+                has[j]=1;
+            }
+        }
+    }
+}
+
+void cal(int n){
+
+    int f=0,num=1,tem=n;
+
+    for(int i=2;i*i<=n;i++){
+
+        if(has[i]==0){
+            int c=0;
+            while(n%i==0){
+                n=n/i;
+                c++;
+            }
+
+            if(f<c){
+                f=c;
+                num=i;
+            }
+        }
+    }
+
+    if(f==0)f=1;
+
+    cout<<f<<endl;
+    n=tem;
+    for(int i=1;i<f;i++){
+        cout<<num<<" ";
+        n=n/num;
+    }
+
+    cout<<n<<endl;
+}
+
+int32_t main(){
+    fast
+
+    prime();
+
+    int tc=1;
+    cin>>tc;
+
+    while(tc--){
+        int n;
+
+        cin>>n;
+        cal(n);
+
+    }
+}
