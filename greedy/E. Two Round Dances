@@ -1,0 +1,21 @@
+/*
+https://codeforces.com/contest/1433/problem/E
+E. Two Round Dances
+Based on circular permutation - editorial is ituitive 
+------------
+*/
+
+#include <bits/stdc++.h>
+#define int long long int
+using namespace std;
+
+int32_t main(){
+    int n; cin>>n;
+
+    int ans=1;
+    for(int i=n-1;i>=2;i--)ans=ans*i;
+    ans=(ans*2)/n;
+
+    cout<<ans;
+
+}
