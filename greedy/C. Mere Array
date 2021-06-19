@@ -1,0 +1,63 @@
+/*
+https://codeforces.com/problemset/problem/1401/C
+C. Mere Array
+-----------
+- Thinking something different works for this 
+- since we have to answer only yes or no so think for "no condition only"
+- when a[i] not divisible by minimum element (a[i]%mi!=0) and is at wrong place no way we can rearrange it so answer is "NO"
+- else answer is "YES"
+---------
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+#define all(c) c.begin(), c.end()
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+void print(int a[],int n){
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+}
+
+int32_t main(){
+    fast
+    int tc=1;
+    cin>>tc;
+
+    while(tc--){
+    int n,i,j;
+    cin>>n;
+
+    int mi=1e9;
+    int a[n],b[n];
+    for(i=0;i<n;i++){
+        int x; cin>>x;
+        mi=min(mi,x);
+        a[i]=b[i]=x;
+    }
+
+    // print(a,n);
+    // print(b,n);
+    bool ok=true;
+    sort(b,b+n);
+    for(i=0;i<n;i++){
+        if(a[i]%mi!=0 and a[i]!=b[i]){
+            ok=false;
+            break;
+        }
+    }
+
+    if(ok){
+        cout<<"YES\n";
+    }
+    else{
+        cout<<"NO\n";
+    }
+
+    }
+return 0;
+}
