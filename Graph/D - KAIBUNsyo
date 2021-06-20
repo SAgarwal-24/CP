@@ -1,0 +1,122 @@
+/*
+https://atcoder.jp/contests/abc206/tasks/abc206_d
+D - KAIBUNsyo
+--------------
+ - Awesome graph based questions , can be solved by DSU too
+  1. Find the th no of componentents using dfs (bcz graph can be disconnected graph)
+  2. in each component of graph find no of edges and 
+  3. do final_ans+= (no_of_edges) //when graph is in tree form as we need minimal edges
+  4. or since no_of_edges = no_of_nodes - 1
+  5. or do final_ans += (no_of_nodes-1)
+
+  //------ Idea intution --------
+  -we need to make palindrome ie a[i]=a[n-i+1]
+  -and for each component of graph we need to make all nodes in graph equal in min no of operations possible
+  - so we can do this job in operations=(no_of_nodes-1)
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n" 
+#define int long long
+#define pii pair<int,int>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define all(c) c.begin(), c.end()
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+
+template<typename C,
+typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+typename std::enable_if<!std::is_same<C, std::string>::value>::type* = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container){
+bool first = true;
+std::stringstream ss; 
+ss << '[';
+   for(const auto &x : container){
+       if (!first){
+           ss << ", ";
+       }
+       first = false;
+       ss << x;
+   }
+   ss << ']';
+   return os << ss.str();
+}
+template<class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1,T2> &p){
+   os << '{' << p.first << ", " << p.second << '}';
+   return os;
+}
+
+void print(int a[],int n){
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+}
+
+int dfs(int node,int vis[], map<int,vector<int>> &adj){
+
+    vis[node]=1;
+    int cnt=1;
+
+    for(auto nbr:adj[node]){
+        if(vis[nbr]==0){
+            cnt+=dfs(nbr,vis,adj);
+        }
+    }
+
+    return cnt;
+}
+
+int32_t main(){
+    fast
+    
+    int n,i; 
+    cin>>n;
+    
+    int a[n];
+    for(i=0;i<n;i++)cin>>a[i];
+
+    set<pii>st;
+    for(i=0;i<n/2;i++){
+
+        int x=a[i],y=a[n-i-1];
+        if(x>y)swap(x,y);
+
+        if(x!=y) //we need unique edges 
+        st.insert({x,y});                     
+    }
+
+    set<int>nodes;
+    map<int,vector<int>>adj;
+    int vis[200001]={0};
+
+    for(auto par:st){
+     
+        int x=par.first, y=par.second;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+
+        nodes.insert(x);
+        nodes.insert(y);
+    }
+
+   // cout<<adj<<endl; Uncomment to see adjacency list
+
+    int ans=0;
+    for(auto x:nodes){
+        if(vis[x]==0)
+        {
+            ans+=dfs(x,vis,adj)-1;
+            
+        }
+    }
+
+    cout<<ans;
+
+
+   
+return 0;
+}
