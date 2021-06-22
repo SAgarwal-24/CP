@@ -1,0 +1,56 @@
+/*
+Pascal's Triangle
+https://leetcode.com/problems/pascals-triangle/
+
+easy 
+*/
+
+class Solution {
+public:
+    vector<vector<int>> generate(int rows) {
+        
+        int i,j;
+        
+        //1-based indexing so space O(31*31) = O(1) since it is fixed
+        int tri[rows+1][31];
+        
+        memset(tri,0,sizeof(tri));
+        
+
+        tri[1][1]=1; 
+        
+        // n=rows
+        // Time : O(n^2)
+        for(i=2;i<=rows;i++){  //O(rows)
+            
+            for(j=1;j<=i;j++){  //O(rows)
+                
+                tri[i][j] = tri[i-1][j]+tri[i-1][j-1];
+            }
+        }
+        
+        vector<vector<int>>ans;
+        
+        for(i=1;i<=rows;i++){
+            vector<int>tem;
+            for(j=1;j<=i;j++){
+                tem.push_back(tri[i][j]);
+            }
+            ans.push_back(tem);
+        }
+        
+        return ans;
+    }
+};
+
+/*  -------- Testcases ---
+5
+6
+7
+10
+13
+15
+20
+25
+30
+*/
