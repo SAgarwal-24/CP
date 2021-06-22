@@ -1,9 +1,16 @@
 /*    
 ugly-numbers
 https://www.geeksforgeeks.org/ugly-numbers/
+--------
+Time Complexity: O(n) 
+Auxiliary Space: O(n)
+----------
+Alter : Binary Search 
+Time Complexity: O(log N)
+Auxiliary Space: O(1)
 -----------
   i/p: n=10000
-	o/p: 288325195312500000 = (2^5)*(3^10)*(5^16) nearly 10^17
+  o/p: 288325195312500000 = (2^5)*(3^10)*(5^16) nearly 10^17
 
 */
 
