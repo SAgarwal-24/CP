@@ -1,0 +1,70 @@
+/*
+-  https://leetcode.com/problems/out-of-boundary-paths/
+-  Out of Boundary Paths
+
+- 3d - dp memoized code 
+- dfs on all 4 sides
+
+- 
+
+- Time(brute force): O(4^max(m,n,max_move)) = O(4^50) =  O(10^8)
+- Time(dp approach): O(m*n*max_move) = O(50*50*50) = O(10^5)
+
+*/
+
+class Solution {
+public:
+    
+    int mod = 1e9+7;
+    int dp[55][55][55];
+        
+    int dfs(int m,int n,int mx_mov,int sr,int sc){
+        
+        //base case - if it is goes out of boundry 
+        if(sr<0 || sc<0 || sr>=m || sc>=n){
+            return 1; 
+        }
+        
+        
+        if(mx_mov<=0)return 0;
+        
+        if(dp[sr][sc][mx_mov]!=-1)return dp[sr][sc][mx_mov];
+        
+        
+        //dfs on all 4 neighbours
+        int w1=dfs(m,n,mx_mov-1,sr-1,sc)%mod;
+        int w2=dfs(m,n,mx_mov-1,sr,sc-1)%mod;
+        int w3=dfs(m,n,mx_mov-1,sr+1,sc)%mod;
+        int w4=dfs(m,n,mx_mov-1,sr,sc+1)%mod;
+        
+        return dp[sr][sc][mx_mov] = ((((w1+w2)%mod + w3)%mod)+w4)%mod;
+        
+        
+    }
+    
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        
+        
+        int ans=0;
+        
+        memset(dp,-1,sizeof(dp));
+        
+        ans= dfs(m,n,maxMove,startRow,startColumn);
+        
+        return ans;
+    }
+};
+
+/* ----- Testcases 
+
+50
+50
+23
+3
+3
+1
+2
+50
+0
+0
+*/
