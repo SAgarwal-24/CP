@@ -4,6 +4,8 @@
 
 - 3d - dp memoized code 
 - dfs on all 4 sides
+- notice there in no need of visited array in dfs
+
 
 - 
 
