@@ -1,0 +1,79 @@
+/*
+Redundant Connection leetcode (easy)
+- Removing each edge and check that wheter we can reach a connected tree using dfs
+- we have to keep visited array cant ignore it
+*/
+
+class Solution {
+public:
+    
+    
+    map<int,vector<int>>adj;
+    
+    int g=0;
+    
+    int dfs(int node,int par,int x,int y,int vis[]){
+        
+        if(vis[node]==1)return 0;
+        
+        vis[node]=1;
+        
+        int c=1;
+        
+      //  cout<<"par node: "<<par<<" "<<node<<"\n";
+        
+        for(auto nbr:adj[node]){
+            if(nbr!=par and !((x==node and y==nbr) || (x==nbr and y==node)) ){
+                c+=dfs(nbr,node,x,y,vis);
+            }
+        }
+        
+        return c;
+    }
+    
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        
+        vector<int>ans(2);
+        
+        for(auto par:edges){
+            
+            int x=par[0], y=par[1];
+            
+            adj[x].push_back(y);
+            adj[y].push_back(x);
+        }
+        
+        /*
+        for(auto par:adj){
+            cout<<"node: "<<par.first<<"=> ";
+            
+            for(auto nbr:adj[par.first]){
+                cout<<nbr<<" ";
+            }
+            cout<<endl;
+        }
+        */
+        
+        int n=adj.size();
+        
+      
+        
+        for(auto par:edges){
+            
+            int x=par[0], y=par[1];
+            int vis[1001]={0};
+            
+            //cout<<"x y: "<<x<<" "<<y<<endl;
+            
+            int acess=dfs(1,-1,x,y,vis);
+    
+            if(acess==n){
+                ans[0]=x, ans[1]=y;
+            }
+        }
+        
+        
+        return ans;
+        
+    }
+};
