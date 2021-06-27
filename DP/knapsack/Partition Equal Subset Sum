@@ -1,0 +1,124 @@
+// ------------ SPACE OPTIMISED SOLUTION ----- Partition Equal Subset Sum (based on Knapsack)
+// https://practice.geeksforgeeks.org/problems/subset-sum-problem2014/1#
+
+/*  -----------  Testcase on which standard solution will fail 
+Constraints:
+1 ≤ N ≤ 100
+1 ≤ arr[i] ≤ 1000
+
+when N=100 and all a[i]=1000
+Then sum= 100000 (ie 10^5)
+and sum/2= 50000
+
+so dp[n][sum/2] takes memory (10^2) * (5*10^4) = 5*(10^6) which can't be allocated by compiler 
+so we have to do space optimise 
+therefore use only 2 rows ie make dp[2][sum/2] and keep updating 0th row after each iteration see code 
+(we can also use % operator but some changes will be their upper one is easier but less optimised a little compared to % operator approach )
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+
+class Solution{
+public:
+    
+    // partition array into 2 subsets with equal sum
+    // sum of array = S
+    // S=s1+s2 so that s1=s2
+    // s1=S/2
+    // if we found a subset is sum S/2  then 
+    // elements in remaining subset also sum upto S/2
+    // we get true o/p
+    
+    // So problem shrinks to finding S/2 in subset sum ... just like subset sum problm
+    // based on knapsack
+    // where we have to find subset or subsequence of weight = W here W=S/2
+    
+    // if S is odd return -1
+    
+    int equalPartition(int n, int a[])
+    {
+        int s=0;
+        for(int i=0;i<n;i++)s+=a[i];
+        
+        if(s&1)return 0;
+        
+        // to find subset with sum=s/2 
+        // make a choice wether to include or exclude ith item from the required subset
+        // property of:  required subset is sum of (reqd subset) = sum/2
+        // it is 0-1 knapsack 
+        
+        s=s/2;
+        int t[2][s+1];
+        memset(t,0,sizeof(t));
+        
+        t[0][0]=1;
+        
+        //  for(int j=0;j<=s;j++){
+        //     cout<<t[0][j]<<" ";
+        // }
+        // cout<<endl;
+        
+        for(int i=1;i<=n;i++) // visit all items and think whether we have to take or not
+        {
+            for(int j=1;j<=s;j++) // check every small sum (ie subproblem) can be achieved or not
+            {
+                //t[j] = t[j]; // exclude  ie achieve j sum from i-1 items 
+                
+                if(j-a[i-1]>=0)     // include ie achieve j-a[i-1] sum from i-1 items 
+                t[1][j] = max(t[1][j],t[0][j-a[i-1]]);
+            }
+            
+            for(int j=1;j<=s;j++)
+            {
+                t[0][j]=t[1][j];      // make Oth array as last updated array
+            }
+            
+        }
+        
+        
+        // for(int j=0;j<=s;j++){   
+        //     cout<<t[1][j]<<" ";
+        // }
+        // cout<<endl;
+        //cout<<endl;
+        
+        int ans=t[1][s];
+        return ans;
+    }
+};
+
+
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int N;
+        cin>>N;
+        int arr[N];
+        for(int i = 0;i < N;i++)
+            cin>>arr[i];
+        
+        Solution ob;
+        if(ob.equalPartition(N, arr))
+            cout<<"YES\n";
+        else
+            cout<<"NO\n";
+    }
+    return 0;
+}  
+
+/*  ----- Testcases ----
+
+4
+2 2 2 4
+----
+
+
+
+*/
