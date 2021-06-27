@@ -1,0 +1,38 @@
+/*
+- Can Submit here: https://www.codingninjas.com/codestudio/problems/maximum-subsequence-sum-such-that-no-three-are-consecutive_1215007
+- https://www.geeksforgeeks.org/maximum-subsequence-sum-such-that-no-three-are-consecutive/
+
+--------
+Based on 
+ stickler thief (https://www.geeksforgeeks.org/maximum-sum-such-that-no-two-elements-are-adjacent/)
+ 
+
+*/
+
+
+int dp[10005];
+
+int fun(vector<int>&a, int i,int n){
+    
+    if(i>=n)return 0;
+    
+    if(dp[i]!=-1)return dp[i];
+    
+    int op1=0, op2=0, op3=0;
+    op1=a[i]+fun(a,i+2,n);
+    op2=fun(a,i+1,n);
+    if(i+1<n)
+        op3=a[i]+a[i+1]+fun(a,i+3,n);
+    
+    dp[i]=max(op1,max(op2,op3));
+    
+    return dp[i];
+}
+
+int maxSum(vector<int> &a, int n) 
+{
+	for(int i=0;i<n;i++)dp[i]=-1;
+    
+    int ans=fun(a,0,n);
+    return ans;
+}
