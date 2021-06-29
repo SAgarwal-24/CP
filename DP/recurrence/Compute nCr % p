@@ -1,7 +1,15 @@
 /*
 - can be solved by lucas theorem, pascal triangle using gcd extended theorem
+------------------
 - nCr % p
+- C(n,r)=C(n−1,r−1)+C(n−1,r)  |  A subset of r elements can be selected from a set of n elements
+- If I select one from n then I am left with C(n−1,r−1) and if I don't select I am left with C(n−1,r).
+
+---------------
 - https://www.geeksforgeeks.org/compute-ncr-p-set-1-introduction-and-dynamic-programming-solution/
+- https://math.stackexchange.com/questions/1625775/how-is-cn-r-cn-1-r-1-cn-1-r
+
+
 */
 
 
