@@ -1,0 +1,93 @@
+/*
+- can be solved by lucas theorem, pascal triangle using gcd extended theorem
+- nCr % p
+- https://www.geeksforgeeks.org/compute-ncr-p-set-1-introduction-and-dynamic-programming-solution/
+*/
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class Solution{
+public:
+ 
+    int dp[1005][805];
+    
+    int mod = 1e9 + 7;
+
+    int C(int n,int k){
+        
+        if(n==0 || n<k){
+            return 0;
+        }
+        
+        if(k==0 || n==k){
+            return 1;
+        }
+        
+       
+
+        if(dp[n][k]!=-1)return dp[n][k];
+        
+        int a = C(n-1,k) % mod ;
+        int b = C(n-1,k-1) % mod ;
+        
+        return dp[n][k] = (a + b)%mod;
+    }
+
+    int nCr(int n, int r){
+     
+       memset(dp,-1,sizeof(dp)); 
+       
+       return C(n,r);
+    }
+};
+
+
+/* ----------------- Bottom up ----
+ int mod = 1e9 + 7;
+
+    
+
+    int nCr(int n, int r){
+     
+        int dp[n+2][r+2];
+        memset(dp,0,sizeof(dp));
+        
+        int i,j;
+        
+        for(i=0;i<=n;i++){
+            dp[i][0] = 1;
+        }
+        
+        
+        for(i=1;i<=n;i++){
+            for(j=1;j<=min(i,r);j++){
+                
+                dp[i][j]=(dp[i-1][j-1] + dp[i-1][j])%mod;
+            }
+        }
+        
+        
+        return dp[n][r];
+    }
+
+
+*/
+
+
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n, r;
+        cin>>n>>r;
+        
+        Solution ob;
+        cout<<ob.nCr(n, r)<<endl;
+    }
+    return 0;
+}  
