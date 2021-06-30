@@ -1,0 +1,122 @@
+/*
+- https://leetcode.com/problems/maximum-profit-in-job-scheduling/
+
+https://leetcode.com/problems/maximum-profit-in-job-scheduling/discuss/1306977/C%2B%2B-or-Standard-Subset-sum-dp-%2B-Binary-search-or-Newbie-oriented-Explanation
+*/
+class Solution {
+public:
+    
+    int dp[50005];
+    
+    //use struct for clean and concise code
+    struct job{
+        int st;
+        int et;
+        int pro;
+    };
+    
+    // sort job according to start time
+    // if start time is same then sort acc. to ending time 
+    static bool cmp(job j1, job j2){
+        
+        if(j1.st<j2.st)return true;
+        else if(j1.st==j2.st)return j1.et<j2.et;
+        
+        return false;
+        
+    }
+   
+    // Finding best subset of job to get maximum profit
+    /* 
+        dp[i] = maximum profit if we consider time dur. of first n-i jobs
+        
+        eg  i=0 -> dp[0] = max profit of time dur first n jobs 
+    */
+    int subset(int i, vector<job>&schedule){
+        
+        int n=schedule.size();
+        
+        if(i>=n){
+            return 0;
+        }
+        
+        
+        if(dp[i]!=-1)return dp[i];
+        
+        // There are two options either to do this job or simply skip it 
+        
+        int op1=0, op2=0, ind=n;
+        
+        // Option-1 : Skip this job
+        op1 = subset(i+1, schedule);
+        
+        
+        // When we decide to do ith job then we can do the next job only after this 
+        // ith job ends ie after ending time of ith job 
+        // since jobs are in sorted order(acc to start time) be can use binary search
+		
+        int lo=i+1, hi=n-1;
+        while(lo<=hi){
+            int mid = lo + (hi-lo)/2;
+            
+            if(schedule[mid].st>=schedule[i].et){
+                ind=mid;
+                hi=mid-1;
+            }
+            else{
+                lo=mid+1;
+            }
+        }
+        
+        
+        // Option-2 : Do this job (so profit of this get added and next possible job is at index=ind) 
+        op2=schedule[i].pro + subset(ind,schedule);
+        
+       
+        return  dp[i] = max(op1,op2);
+    }
+    
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& p) {
+        
+        vector<job>schedule;
+        int i, n=p.size();
+        
+        for(i=0;i<n;i++){
+            job obj;
+            
+            obj.st = startTime[i];
+            obj.et = endTime[i];
+            obj.pro  = p[i];
+            
+            schedule.push_back(obj);
+        }
+        
+        //jobs in sorted order according to start time
+        sort(schedule.begin(), schedule.end(), cmp);
+        
+        /* --- Uncomment to see that job in sorted order
+        for(auto x:schedule){
+            
+            cout<<"("<<x.st<<","<<x.et<<","<<x.pro<<") ";
+        }
+        cout<<endl;
+        */
+    
+        
+       memset(dp,-1,sizeof(dp));
+        
+       return subset(0,schedule);
+        
+        
+    }
+};
+
+/*   --- Tc's ---
+[6,15,7,11,1,3,16,2]
+[19,18,19,16,10,8,19,8]
+[2,9,1,19,5,7,3,19]
+
+[6,15,7,11,1,3,16,2,1,2,2]
+[19,18,19,16,10,8,19,8,11,7,7]
+[2,9,1,19,5,7,3,19,4,3,5]
+*/
