@@ -1,5 +1,6 @@
 /*
 - https://leetcode.com/problems/maximum-profit-in-job-scheduling/
+- dp + binary search
 
 https://leetcode.com/problems/maximum-profit-in-job-scheduling/discuss/1306977/C%2B%2B-or-Standard-Subset-sum-dp-%2B-Binary-search-or-Newbie-oriented-Explanation
 */
