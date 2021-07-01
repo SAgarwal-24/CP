@@ -1,5 +1,5 @@
 /*
-Better Solution is dp
+Better Solution is using dp or stack (https://leetcode.com/problems/maximal-rectangle/discuss/764461/c%2B%2B-dp)
 - but can be solved using prefix sum on matrix + binary search which I did see below 
 
 https://leetcode.com/problems/maximal-rectangle/
