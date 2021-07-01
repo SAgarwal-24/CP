@@ -1,5 +1,6 @@
 /*
-Better Solution is using dp or stack (https://leetcode.com/problems/maximal-rectangle/discuss/764461/c%2B%2B-dp)
+Better Solution is using dp or stack(histogram based app) (https://leetcode.com/problems/maximal-rectangle/discuss/764461/c%2B%2B-dp)
+- similar to finding : Largest Rectangle in Histogram(https://leetcode.com/problems/largest-rectangle-in-histogram/)
 - but can be solved using prefix sum on matrix + binary search which I did see below 
 
 https://leetcode.com/problems/maximal-rectangle/
