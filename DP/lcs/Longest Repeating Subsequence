@@ -1,0 +1,62 @@
+//gfg has problem with constraing so do like dp[n+1][n+1] instead of dp[1003][1003] ie according to size of string
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+class Solution {
+	
+	public:
+	  
+	    int lcs(string &s,int i,int j,vector<vector<int>>&dp){
+	        
+	        if(i<0 || j<0)return 0;
+	        
+	        if(dp[i][j]!=-1)return dp[i][j];
+	        
+	        int ans=0;
+	        
+	        if(s[i]==s[j] and i!=j){
+	            ans = 1+lcs(s,i-1,j-1,dp);
+	        }
+	        else{
+	            int op1=lcs(s,i-1,j,dp);
+	            int op2=lcs(s,i,j-1,dp);
+	            
+	            ans = max(op1, op2);
+	        }
+	        
+	        dp[i][j] = ans;
+	        
+	        return ans;
+	    }
+	
+	
+		int LongestRepeatingSubsequence(string str){
+		    
+		    
+		  //  memset(dp,-1,sizeof(dp));
+		    
+		    int n=str.length();
+		    vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+		    
+		    return  lcs(str,n-1,n-1,dp);
+		    
+		   
+		}
+
+};
+
+
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		string str;
+		cin >> str;
+		Solution obj;
+		int ans = obj.LongestRepeatingSubsequence(str);
+		cout << ans << "\n";
+	}
+	return 0;
+}  
