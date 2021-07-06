@@ -1,0 +1,53 @@
+/*
+Simple Memoization
+- Sort Integers by The Power Value (leetcode)
+*/
+
+class Solution {
+public:
+    
+    int n=1000;
+    
+    int dp[1000000];
+    
+    int fun(int n){
+        
+        //cout<<"n: "<<n<<endl;
+        
+        if(n==1)return 1;
+        
+        if(dp[n]!=-1)return dp[n];
+        
+        int steps=(n&1)?fun((3*n+1)):fun(n/2);
+        
+        dp[n]=steps+1;
+        
+        return steps+1;
+    }
+    
+    int getKth(int lo, int hi, int k) {
+        
+        memset(dp,-1,sizeof(dp));
+        
+
+        vector<pair<int,int>>power;
+        for(int i=hi;i>=lo;i--){  
+            int x = fun(i);
+            power.push_back({x,i});
+            
+        }
+        
+        sort(power.begin(), power.end());
+        
+        // for(auto x:power)cout<<x.first<<","<<x.second<<"|";
+        // cout<<endl;
+        
+        return power[k-1].second;
+        
+    }
+};
+/*
+995
+999
+2
+*/
