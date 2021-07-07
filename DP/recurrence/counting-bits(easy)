@@ -1,0 +1,26 @@
+/*
+helpful resource: https://www.youtube.com/watch?v=awxaRgUB4Kw
+after this it is straight forward to implement
+---
+https://leetcode.com/problems/counting-bits/
+*/
+
+class Solution {
+public:
+   
+    
+    vector<int> countBits(int n) {
+        
+        vector<int>setbits(n+1);
+        
+        setbits[0]=0;
+        
+        for(int i=1;i<=n;i++){
+            setbits[i]=setbits[i/2];
+            
+            setbits[i]+=(i&1)?1:0;
+        }
+        
+        return setbits;
+    }
+};
