@@ -1,0 +1,52 @@
+//https://leetcode.com/problems/count-sorted-vowel-strings/
+
+class Solution {
+public:
+    
+    // 0 1 2 3 4
+    // a e i o u 
+    // each ith place (out of n places) can have 5 characters
+    // do n*5 memory ie 50*5 
+    
+    int n=0;
+    
+    int dp[55][6];
+    
+    int fun(int i, int j){
+        
+     
+        if(i==n || j==5)return 1;
+        
+        if(dp[i][j]!=-1){
+            // Repeated states
+           // cout<<"i j n: "<<i<<" "<<j<<" "<<n<<endl;
+            return dp[i][j];
+        }
+        
+        int ans=0;
+        
+        for(int k=j;k<5;k++)
+        {
+            ans+=fun(i+1,k);
+        }
+       
+        
+        return dp[i][j] = ans;
+        
+    }
+    
+    int countVowelStrings(int n) {
+        
+        this->n=n;
+        int ans=0;
+        
+        memset(dp,-1,sizeof(dp));
+        
+        for(int j=0;j<5;j++)
+        {
+            ans += fun(1,j);
+        }
+        
+        return ans;
+    }
+};
