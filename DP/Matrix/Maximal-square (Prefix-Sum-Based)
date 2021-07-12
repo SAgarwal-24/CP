@@ -1,0 +1,59 @@
+// https://leetcode.com/problems/maximal-square/
+// Space : O(mn)
+// Time  : O(m*n*min(m,n))
+class Solution {
+public:
+    
+    void print(vector<vector<int>>a){
+         int i, j, row=a.size(), col=a[0].size();
+        
+        for(i=0;i<row;i++){
+            for(j=0;j<col;j++){
+                cout<<a[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        
+        cout<<endl;
+    }
+    
+    int maximalSquare(vector<vector<char>>& a) {
+        
+        int i,j,row=a.size(),col=a[0].size(),ans=0;
+        
+        vector<vector<int>>ps(row+1,vector<int>(col+1,0));
+        
+        for(i=1;i<=row;i++){
+            for(j=1;j<=col;j++){
+                ps[i][j] = (a[i-1][j-1]-'0') + ps[i-1][j] + ps[i][j-1] - ps[i-1][j-1];
+            }
+        }
+        
+       // print(ps);
+        
+        int side=min(row,col),ones=0;
+        
+        for(int x=1;x<=side;x++)
+        {
+            for(i=1;i<=row-x+1;i++)
+            {
+                 for(j=1;j<=col-x+1;j++)
+                {
+                    int cnt = ps[i+x-1][j+x-1] - ps[i-1][j+x-1] - ps[i+x-1][j-1] + ps[i-1][j-1];
+                    
+                     //cout<<"x ones cnt: "<<x<<" "<<ones<<" "<<cnt<<endl;
+                    if(cnt==x*x){
+                        ans=x*x; //largest area
+                    }
+                    
+                }
+            }
+           
+        }
+        
+        
+        
+        return ans;
+        
+    }
+};
