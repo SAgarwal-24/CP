@@ -1,0 +1,29 @@
+//O(1) space solution algorithm is intresting 
+// https://leetcode.com/problems/partition-array-into-disjoint-intervals/
+
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& a) {
+        
+        int i,n=a.size(),partition=0;
+        
+        int left_max=a[0] , global_max=a[0];
+        
+        for(i=1;i<n;i++){
+            global_max = max(global_max, a[i]);
+            
+            if(left_max>a[i]){
+                // then this 'i' qualifies for partition bcz
+                // we are expecting elements from i+1 to n should be greater than left_max
+                
+                left_max = global_max; // global max till now is new left_max incase we got a future 'i' qualifying as potential partition
+                
+                partition = i;
+                
+            }
+        }
+        
+        return partition+1;
+        
+    }
+};
