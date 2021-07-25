@@ -1,0 +1,92 @@
+// Selection Sort - O(n^2) , O(1) space
+// Graph approach - O(n) , O(n)
+// Greedy kind of logic as we have to minimise swaps using sorting and then find cycle len ie a graph containing cycle where no of edges = no of swaps required
+ 
+
+
+class Solution 
+{
+    public:
+    //Function to find the minimum number of swaps required to sort the array. 
+	
+	static bool cmp(int *a, int *b){
+	    if(a[0]<b[0])
+	      return true;
+	      
+	    return false;
+	}
+	
+	int minSwaps(vector<int>&a)
+	{
+	    int n=a.size(),i,j;
+	    int **adj;
+	    
+	    adj = new int*[n];
+	    
+	    for(i=0;i<n;i++){
+	        
+	        adj[i] = new int[2];
+	        
+	        adj[i][0] = a[i];
+	        adj[i][1] = i;
+	    }
+	    
+	    sort(adj, adj+n,cmp );
+	    
+	   // for(i=0;i<n;i++){
+	   //     cout<<"("<<adj[i][0]<<","<<adj[i][1]<<") ";
+	   // }
+	   
+	   int ans=0,len=0;
+	   i=0;
+	   int vis[n]={0};
+	   
+	   while(i<n){
+	       
+	       if(vis[i]==1){
+	           i++; continue;
+	       }
+	       
+	       vis[i]=1;
+	       
+	       j=adj[i][1];
+	       len=0;
+	       
+	       while(i!=j){
+	           
+	           vis[j] = 1;
+	           
+	           j=adj[j][1];
+	           len++;
+	       }
+	       
+	     //  cout<<i<<" "<<len<<endl;
+	       
+	       ans+=len;
+	       i++;
+	   }
+	   
+	   return ans;
+	}
+};
+
+
+
+
+
+// { Driver Code Starts.
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n;
+		cin >> n;
+		vector<int>nums(n);
+		for(int i = 0; i < n; i++)
+			cin >> nums[i];
+		Solution obj;
+		int ans = obj.minSwaps(nums);
+		cout << ans <<"\n";
+	}
+	return 0;
+}  // } Driver Code Ends
