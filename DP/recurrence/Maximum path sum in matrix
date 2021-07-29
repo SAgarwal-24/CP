@@ -1,0 +1,73 @@
+
+/*
+   Simple straight forward recurrence - easy problem
+
+*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+
+
+
+
+class Solution{
+public:
+    
+    
+    int n=0;
+    
+    int dp[502][502];
+    
+    int fun(vector<vector<int>>&a, int row, int col){
+        
+        if(row==n || col<0 || col>=n)
+            return 0;
+            
+        if(dp[row][col]!=-1)
+            return dp[row][col];
+        
+        int op1=0, op2=0, op3=0;
+        
+        op1 = fun(a,row+1,col-1);
+        op2 = fun(a,row+1,col);
+        op3 = fun(a,row+1,col+1);
+        
+        return dp[row][col] = a[row][col] + max(op1, max(op2, op3));
+    }
+
+    int maximumPath(int n, vector<vector<int>> a)
+    {
+        int ans=0;
+        this->n = n;
+        
+        memset(dp,-1,sizeof(dp));
+        
+        for(int i=0;i<n;i++){
+            ans = max(ans,fun(a,0,i));
+        }
+        
+        return ans;
+    }
+};
+
+// { Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int N;
+        cin>>N;
+        vector<vector<int>> Matrix(N, vector<int>(N, 0));
+        for(int i = 0;i < N*N;i++)
+            cin>>Matrix[(i/N)][i%N];
+        
+        Solution ob;
+        cout<<ob.maximumPath(N, Matrix)<<"\n";
+    }
+    return 0;
+}  // } Driver Code Ends
