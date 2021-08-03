@@ -8,8 +8,8 @@ public:
         fre[0]=-1;
         
         for(i=0;i<n;i++){
-            int x = a[i] % k;
-            sum += x;
+            
+            sum += a[i];
             
             //if the sum % k is present previously
             if(fre.find(sum%k)!=fre.end() ){
