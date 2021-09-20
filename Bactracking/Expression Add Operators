@@ -28,7 +28,7 @@ public:
         
         for(int i=start;i<num.size();i++){
             
-            if(start<i and num[start]=='0')
+            if(start<i and num[start]=='0') //skip leading zeros
                 break;
             
              s += num[i];
