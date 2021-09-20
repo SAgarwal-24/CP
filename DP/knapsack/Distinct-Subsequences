@@ -3,6 +3,7 @@ https://leetcode.com/problems/distinct-subsequences/
 -----
 Given two strings s and t, return the number of distinct sequences of s which equals t.
 
+-> this kind of 0/1 knapsack - where we have to do simple exculsion or inclusion for each character
 */
 
 class Solution {
