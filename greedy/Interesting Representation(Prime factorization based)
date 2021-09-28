@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int unsigned long long
+#define mod 1000000007
+#define all(c) c.begin(), c.end()
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define hh cout << endl
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+
+int prime[55]={0};
+vector<int>a;
+
+void sieve(){
+
+    int n = 50;
+
+    for(int i=2;i*i<=n;i++){
+
+        if(prime[i]==1){
+           continue;
+        }
+        
+       // watch(i);
+        
+        for(int j=i*i;j<=n;j=j+i){
+
+            prime[j]=1;
+
+        }
+    }
+
+     for (int p = 2; p <= n; p++)
+        if (prime[p]==0)
+            {
+               // cout << p << " ";
+                a.push_back(p);
+            }
+
+    cout<<endl;
+
+}
+
+void prime_factorization(int n){
+
+    for(auto p:a){
+
+        if(n==0)
+         break;
+
+        while(n%p==0){
+            cout<<p<<" ";
+            n=n/p;
+        }
+
+    }
+
+    hh;
+}
+
+//It is easy - question - see editorial it is awesome 
+
+int32_t main() {
+
+    sieve();
+   // cout<<a<<endl;
+
+    //--------Observation----------
+    //roughly around or within 13 prime nos product 'p' will cross 1e18(ie range of A,B as A,B<=1e18) so 13 prime
+    // numbers are enough to be stored as we need smallest prime no for 
+    // odd no.s case(see editorial) hence after 13 prime nos we don't need to store 
+
+   // int p=1;
+
+    // for(int i=1;i<a.size();i++){
+
+    //     p = p*a[i];
+
+    //     if(p<=1e18){
+    //         cout<<p<<" ";
+    //     }
+    //     else{
+    //         break;
+    //     }
+    // }
+
+
+    int tc=1;
+    cin>>tc;
+
+    while(tc--){
+
+        int n,i,j;
+        cin>>n;
+
+        if(n&1){
+
+            for(i=1;i<a.size();i++){
+
+                if(n%a[i]!=0){
+                    cout<<a[i]*n<<" "<<(a[i]-1)*n;
+                    break;
+                }
+            }
+        }
+        else{
+            cout<<2*n<<" "<<n;
+        }
+
+        cout<<endl;
+    }
+  
+
+    return 0;
+
+
+ 
+
+}
