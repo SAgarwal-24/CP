@@ -1,0 +1,66 @@
+//https://www.codechef.com/CSNS21B/problems/GAMEW
+// alter link : https://www.codechef.com/problems/GAMEW
+
+// Simple dp intuition based 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+void solve(){
+
+    int n,i,j=0,ans=0; 
+    
+    cin>>n;
+
+    string s,t="";
+
+    cin>>s;
+
+       for(i=0;i<n-1;i++){
+
+        if(s[i] != s[i+1]){
+            t += s[i];
+        }
+    }
+
+    t+= s[n-1];
+
+    int len = t.size();
+
+    int dp[len+3]={0};
+
+    dp[1] = 1; //wining state
+    dp[2] = 0; //losing state
+
+    for(i=3;i<=len;i++){
+
+        dp[i] = 1-min(dp[i-1], dp[i-2]);
+    }
+
+    if(dp[len]==1){
+        cout<<"SAHID\n";
+    }
+    else{
+        cout<<"RAMADHIR\n";
+    }
+    
+    
+}
+
+
+int32_t main()
+{
+     int tc = 1;
+    cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
