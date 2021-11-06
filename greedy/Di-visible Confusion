@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// problem link: https://codeforces.com/contest/1604/problem/C
+
+
+// brute force is essence 
+// obv : lcm(1,2,3,...21,22,23) > 10^9 
+// Pure Maths and observation based problem so see editorial which is nicely written 
+
+// if ai is divisible by all integers from 2 to i+1,
+// then it means that ai is divisible by LCM(2,3,…,(i+1))
+
+void solve(){
+
+    int n,j,i;
+    cin>>n;
+
+    int a[n];
+
+
+    for(i=0;i<n;i++){
+        cin>>a[i];
+    }
+
+    for(i=0;i<21 and i<n;i++){
+
+        bool ok = true;
+
+        for(j=i+2;j>=2;j--){
+
+            if(a[i]%j!=0){
+                ok = false;
+                break;
+            }
+        }
+
+        if(ok){
+            cout<<"NO\n";
+            return;
+        }
+    }
+
+    cout<<"YES\n";
+
+   
+    return;
+}
+
+int32_t main()
+{
+     int tc = 1;
+    cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
