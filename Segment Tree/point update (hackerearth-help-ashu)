@@ -1,0 +1,172 @@
+//link:https://www.hackerearth.com/practice/data-structures/advanced-data-structures/fenwick-binary-indexed-trees/practice-problems/algorithm/help-ashu-1/
+//point update 
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+
+
+void build(vi &tree, vi &a, int as, int ae, int index){
+
+    // cout<<index<<":"<<as<<","<<ae<<endl;
+
+    if(as==ae){
+        tree[index] = (a[as]&1) ? 0:1; //we are keeping count of even no.s only 
+        return;
+    }
+
+    int mid = as + ((ae-as)>>1);
+    build(tree,a,as,mid,2*index);
+    build(tree,a,mid+1,ae,2*index+1);
+
+    tree[index] = tree[2*index] + tree[2*index+1];
+}
+
+// 0-9 , pos = 3 -> then traverse to child nodes
+// 0-1 or 4-5 , pos = 3 -> stop , no overlap 
+
+
+void point_update(vi &tree, int ss, int se, int pos, int new_val, int index){
+
+    if(pos<ss || pos>se)
+       return;
+
+    if(ss==se){
+        tree[index] = (new_val&1) ? 0:1;
+        return;
+    }
+
+    int mid = ss + ((se-ss)>>1);
+
+    point_update(tree,ss,mid,pos,new_val,2*index);
+    point_update(tree,mid+1,se,pos,new_val,2*index+1);
+
+    tree[index] = tree[2*index] + tree[2*index+1];
+
+}
+
+int query(vi &tree, int ss, int se, int qs, int qe, int index){
+
+    //full overlap
+    if(qs<=ss and se<=qe)
+        return tree[index]; //storing count of even no.s in range "ss to se"
+
+    //no overlap
+    if(se<qs || qe<ss)
+        return 0;
+
+    int mid = ss + ((se-ss)>>1);
+    int left = query(tree,ss,mid,qs,qe,2*index); //cnt of even nos in left tree
+    int ri   = query(tree,mid+1,se,qs,qe,2*index+1); //cnt of odd nos in right tree
+
+    return left + ri;
+}
+
+void solve(){
+
+    int i,n;
+    cin>>n;
+
+    vector<int>a(n);
+
+    for(i=0;i<n;i++)
+    cin>>a[i];
+
+
+    vector<int>tree(4*n,0);
+
+    build(tree,a,0,n-1,1);
+
+    // watch(tree);
+
+    int q;
+    cin>>q;
+
+    while(q--){
+        int type;
+        cin>>type;
+
+        if(type>0){
+            //query 
+            int l,r;
+            cin>>l>>r;
+            l--,r--;
+            int even_cnt = query(tree,0,n-1,l,r,1);
+
+            if(type&1){
+                cout<<even_cnt<<endl;
+            }else{
+                cout<<(r-l+1)-even_cnt<<endl;
+            }
+        }
+        else{
+            //point update
+            int pos,new_val;
+            cin>>pos>>new_val;
+            pos--;
+
+            // watch(tree);
+            point_update(tree,0,n-1,pos,new_val,1);
+            // watch(tree);
+        }
+    }
+}
+
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
