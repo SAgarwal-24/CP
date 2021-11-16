@@ -1,0 +1,186 @@
+// problem link: https://www.spoj.com/problems/RMQSQ/ (basic query based problem to find minimum element)
+// code link: https://ideone.com/COfBGQ
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+
+// build segment tree
+/*
+            0-5 
+        0-2      3-4
+    0-1  2-2  3-3  4-4
+0-0  1-1
+
+
+*/
+
+void  build(vi &tree, vi &a, int as, int ae, int index){
+
+    if(as==ae){
+        //leaf node - base case
+        tree[index] = a[as];
+        return ;
+    }
+
+
+    //traverse left and right subtree  - rec case 
+
+    int mid = as + ((ae-as)>>1);
+    build(tree, a, as, mid, 2*index);
+    build(tree,a,mid+1,ae,2*index + 1);
+
+
+    tree[index] =  min(tree[2*index], tree[2*index + 1]);
+}
+
+int  query(vi &tree, vi &a, int ss, int se, int qs, int qe,  int index){
+
+    //full overlap
+    if(qs<=ss  and  se<=qe){
+        return tree[index];
+    }
+
+    //no overlap
+    if(se<qs || qe<ss)
+       return INT_MAX;
+
+    // partial overlap
+    int mid = ss + ((se-ss)>>1);
+    int left = query(tree,a,ss,mid,qs,qe,2*index);
+    int ri   = query(tree,a,mid+1,se,qs,qe,2*index+1);
+
+    return min(left,ri);
+
+}   
+
+
+void solve(){
+	 
+    int i,n;
+    cin>>n;
+
+    vector<int>a(n);
+    for(i=0;i<n;i++)
+        cin>>a[i];
+
+    vector<int>tree(4*n,0);
+
+    build(tree,a,0,n-1,1);
+
+    int q;
+    cin>>q;
+
+    while(q--){
+        int l,r;
+        cin>>l>>r;
+
+        cout<<query(tree,a,0,n-1,l,r,1)<<endl;
+    }
+}
+
+
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
+
+/* ---tc's
+
+Input: 
+5
+1 2 3 4 5 
+5
+0 1
+0 0 
+1 3
+2 4
+1 4
+
+output:
+1
+1
+2
+3
+2
+-------
+
+Input: 
+6
+5 4 5 2 1 7
+6
+0 1
+0 0 
+1 3
+2 4
+1 4
+3 5
+
+output:
+4
+5
+2
+1
+1
+1
+
+
+
+
+*/
+
