@@ -7,6 +7,8 @@
   https://github.com/Waqar-107/Codeforces/blob/master/C-set/52C.Circular%20RMQ.cpp (definitely see this awesome oops based code too) 
   https://www.diffchecker.com/poybMGLa (changes in my initial wrong codes)
   
+  http://gautamsegtree.blogspot.com/2015/10/circular-rmqrmq-in-circular-que.html (blogs written in 2015) 
+  
 */
 
 #include <bits/stdc++.h>
