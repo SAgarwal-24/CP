@@ -1,0 +1,253 @@
+/*
+   Q: Count & Update Multiples of 3   in a particular range 
+   
+  link: https://www.codechef.com/problems/MULTQ3
+  sol. link: https://www.codechef.com/viewsolution/54007868
+  
+  resource link which I followed
+  - https://www.youtube.com/watch?v=jQ7sriMyrT4&list=PL2q4fbVm1Ik6v2-emg_JGcC9v2v2YTbvq&index=9&t=24s
+  - https://www.codechef.com/viewsolution/34449669
+  
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+int gcd(int a, int b){
+
+    if(b==0)
+      return a;
+
+    return gcd(b,a%b);
+}
+
+struct node{
+
+    int rem[3]={0};
+
+};
+
+void combine(node &t1, node &t2, node &t3){
+
+    for(int i=0;i<=2;i++){
+        t3.rem[i] = t1.rem[i] + t2.rem[i];
+    }
+   
+}
+
+node  changes(node &tree_node, int inc){
+
+    node ans;
+
+     for(int i=0;i<=2;i++){
+         ans.rem[(i+inc)%3] = tree_node.rem[i];
+     }
+
+     return ans;
+}
+
+void build(vector<node> &tree, int at, int l, int r){
+
+    if(l==r){
+        tree[at].rem[0] = 1;
+        tree[at].rem[1] = tree[at].rem[2] = 0;
+        return;
+    }
+
+    int mid = l + (r-l)/2;
+    build(tree,2*at,l,mid);
+    build(tree,2*at+1,mid+1,r);
+
+    combine(tree[2*at], tree[2*at+1], tree[at]);
+}
+
+/*
+
+inc = 1
+0 1 2
+2 0 1 
+
+ 3 2 4
+ 4 3 2
+
+ 0 -> 1
+ 1 -> 2
+ 2 -> 0
+
+--------------
+inc = 2
+
+ 0 1 2
+ 1 2 0 
+
+ 0 -> 2
+ 1 -> 0
+ 2 -> 1
+
+*/
+
+void update(vector<node> &tree, vi &lazy, int at, int l, int r, int qs, int qe){
+
+    //handle pending updates
+    if(lazy[at] != 0){
+
+        if(l!=r){
+            lazy[2*at] += lazy[at];
+            lazy[2*at+1] += lazy[at];
+        }
+
+        lazy[at] = lazy[at] % 3;
+        tree[at] = changes(tree[at], lazy[at]);
+        lazy[at] = 0;
+    }
+
+    //no overlap
+    if(r<qs || qe<l)
+        return ; 
+    
+    //full overlap - ie [l,r] completely inside [qs,qe]
+    // therefore all a[i] , (l<=i<=r) will be incremented by 1
+    if(qs<=l and r<=qe){
+        
+        tree[at] = changes(tree[at], 1);
+
+        if(l!=r){
+            lazy[2*at] = (lazy[2*at] + 1)%3;
+            lazy[2*at+1] = (lazy[2*at+1] + 1)%3;
+        }
+
+        return;
+    }
+
+    //partial overlap
+    int mid = l + (r-l)/2;
+    update(tree,lazy,2*at,l,mid,qs,qe);
+    update(tree,lazy,2*at+1,mid+1,r,qs,qe);
+
+    combine(tree[2*at], tree[2*at+1], tree[at]);
+
+}
+
+int query(vector<node> &tree, vi &lazy, int at, int l, int r, int qs, int qe){
+
+    //handle pending updates
+    if(lazy[at] != 0){
+
+        if(l!=r){
+            lazy[2*at] += lazy[at];
+            lazy[2*at+1] += lazy[at];
+        }
+
+        lazy[at] = lazy[at] % 3;
+        tree[at] = changes(tree[at], lazy[at]);
+        lazy[at] = 0;
+    }
+
+    //no overlap
+    if(r<qs || qe<l)
+        return 0; //no multiples of zero 
+
+    //full overlap
+    if(qs<=l and r<=qe){
+        return tree[at].rem[0];
+    }
+
+    //partial overlap
+    int mid = l + (r-l)/2;
+
+    int left = query(tree,lazy,2*at,l,mid,qs,qe);
+    int ri   = query(tree,lazy,2*at+1,mid+1,r,qs,qe);
+
+    return left + ri;
+
+}
+
+void solve(){
+
+   int n,i,q;
+   cin>>n>>q;
+
+   vector<node>tree(4*n);
+   vector<int>lazy(4*n,0);
+
+
+   //initially array contains only zeros so it is trivial to pass in build function
+   build(tree, 1, 0, n-1);
+
+   for(i=0; i<q; i++){
+       int type,l,r;
+
+       cin>>type>>l>>r;
+
+       if(type&1){  
+           cout<<query(tree,lazy,1,0,n-1,l,r)<<endl;
+       }
+       else{
+           //updates 
+           update(tree,lazy,1,0,n-1,l,r);
+       }
+   }
+
+
+   
+
+    
+}
+
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
