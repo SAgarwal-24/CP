@@ -1,0 +1,148 @@
+//link: https://www.codechef.com/problems/GCDQ
+
+/*
+  Simple Straight forward segment tree based 
+
+  Alter - by making prefix gcd and suffix gcd  (https://www.codechef.com/viewsolution/54031858)
+  
+*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define vi vector<int>
+#define vvi vector<vector<int>>
+
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+#define watch(x) cout << (#x) << " is " << (x) << endl
+
+
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+
+int gcd(int a, int b){
+
+    if(b==0)
+        return a;
+
+    return gcd(b,a%b);
+}
+
+void build(vi &tree, int at, vi &a,int l, int r){
+
+    if(l==r){
+        tree[at] = a[l];
+        return;
+    }
+
+    int mi = l+(r-l)/2;
+    build(tree,2*at,a,l,mi);
+    build(tree,2*at+1,a,mi+1,r);
+
+    tree[at] = gcd(tree[2*at], tree[2*at+1]);
+}
+
+int query(vi &tree, int at, int l, int r, int qs, int qe){
+
+    //no overlap
+    if(r<qs ||  qe<l)
+        return 0;
+
+    //full overlap
+    if(qs<=l and r<=qe)
+        return tree[at];
+
+    //partial overlap
+
+    int mi = l + (r-l)/2;
+    int left = query(tree,2*at,l,mi,qs,qe);
+    int ri   = query(tree,2*at+1,mi+1,r,qs,qe);
+
+    return gcd(left, ri);
+}
+
+void solve(){
+
+    int n,q,i;
+
+    cin>>n>>q;
+
+    vector<int>a(n);
+
+    for(i=0;i<n;i++)
+        cin>>a[i];
+
+    vector<int>tree(4*n);
+
+    build(tree,1,a,0,n-1);
+
+    // watch(a);
+    // watch(tree);
+
+    for(i=0;i<q;i++){
+        int l,r;
+        cin>>l>>r;
+
+        l--,r--;
+
+        // cout<<"l,r: "<<l<<","<<r<<endl;
+
+        int p1=0, p2=0;
+
+        if(l-1>=0)
+        p1 = query(tree,1,0,n-1,0,l-1);
+
+        if(r+1<=n-1)
+        p2 = query(tree,1,0,n-1,r+1,n-1);
+
+        // watch(p1);
+        // watch(p2);
+
+        cout<< gcd(p1,p2) <<endl;
+
+    }
+
+}
+
+
+int32_t main()
+{
+    fast int tc = 1;
+    cin >> tc;
+
+ 
+    while (tc--)
+    {
+        solve();
+    }
+
+
+    return 0;
+}
