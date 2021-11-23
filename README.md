@@ -16,7 +16,7 @@ so we will do
 -> Find using bin expo
 
 
-# To calculate C(n,r) without modulo
+# To calculate C(n,r) efficiently without modulo
 int ncr(int n, int r){
 
     if(n<r)
