@@ -53,25 +53,21 @@ int ncr(int n, int r){
 # General template for Binary Search on real values 
 
       long double ans=0.0, l=0, r=10000000;
-
-    // while(r-l>1e-4){
-
-    for(int iterations=0;iterations<100; iterations++){
+    
+    //change no of iterations acc. to requirements
+    for(int iterations=0;iterations<100; iterations++){  //Alter for-loop can be while-loop->  while(r-l>1e-4) 
 
         long double mid = l+(r-l)/2;
       
         if(check_logic(mid)){
             ans = mid;
             l = mid;
-        }
-        else{
+        }else{
             r = mid ;
-        }
-
-        
+        }  
     }
-
-   cout<<setprecision(20)<<ans<<endl;
+ 
+  cout<<setprecision(20)<<ans<<endl;
 
 
 
