@@ -49,3 +49,29 @@ int ncr(int n, int r){
     return nr/den;       // or simply->  return nr; 
 }
 
+
+# General template for Binary Search on real values 
+
+      long double ans=0.0, l=0, r=10000000;
+
+    // while(r-l>1e-4){
+
+    for(int iterations=0;iterations<100; iterations++){
+
+        long double mid = l+(r-l)/2;
+      
+        if(check_logic(mid)){
+            ans = mid;
+            l = mid;
+        }
+        else{
+            r = mid ;
+        }
+
+        
+    }
+
+   cout<<setprecision(20)<<ans<<endl;
+
+
+
