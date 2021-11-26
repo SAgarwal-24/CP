@@ -45,6 +45,8 @@ int nCr(int n, int r){
 
 
 # To calculate C(n,r) efficiently without modulo
+
+```
 int ncr(int n, int r){
 
     if(n<r)
@@ -76,10 +78,11 @@ int ncr(int n, int r){
   
     return nr/den;       // or simply->  return nr; 
 }
-
+```
 
 # General template for Binary Search on real values 
 
+```
       long double ans=0.0, l=0, r=10000000;
     
     //change no of iterations acc. to requirements
@@ -96,6 +99,7 @@ int ncr(int n, int r){
     }
  
   cout<<setprecision(20)<<ans<<endl;
+  ```
 
 
 
