@@ -15,6 +15,34 @@ so we will do
 ->  inv(n) = power(n, mod-2); 
 -> Find using bin expo
 
+```
+int pow(int n, int i){
+    int a=n,ans=1;
+    while(i>0){
+        if(i&1){
+            ans=(ans*1LL*a)%MOD;
+        }
+        a=(a*1LL*a)%MOD;
+        i=i>>1;
+    }
+    return ans;
+}
+
+int inv(int n){
+    return pow(n, MOD-2);
+}
+int nCr(int n, int r){
+    if(r>n)return 0;
+    else{
+        int res = f[n];
+        res = (res*1LL*inv(f[r]))%MOD;
+        res = (res*1LL*inv(f[n-r]))%MOD;
+        return res;
+    }
+}
+
+```
+
 
 # To calculate C(n,r) efficiently without modulo
 int ncr(int n, int r){
