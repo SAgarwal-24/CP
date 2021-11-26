@@ -27,13 +27,11 @@ void solve(){
     while(lo<=hi){
 
         int mid = lo + (hi-lo)/2; //no of councils = mid
-        int need = mid*k;
+        int need = mid*k;        //think it as 2d matrix (mid X k) 
 
-        // watch(mid);
-        // watch(need);
         
         for(i=0;i<n;i++){
-            need -= min(fre[i],mid);
+            need -= min(fre[i],mid);  //  min(fre[i],mid) columns are filled by students of ith group-> ie 1 student in each column(or council)
         }
 
         if(need<=0){
