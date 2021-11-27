@@ -2,6 +2,8 @@
 //and observation based
 //link: https://codeforces.com/contest/1551/problem/B2
 
+//alter binary search solution: https://codeforces.com/contest/1551/submission/137076295
+
 #include <bits/stdc++.h>
 using namespace std;
 #define endl "\n"
