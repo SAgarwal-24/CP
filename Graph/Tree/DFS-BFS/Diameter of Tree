@@ -1,0 +1,55 @@
+//link:https://codeforces.com/contest/690/problem/C2
+//sol: https://codeforces.com/contest/690/submission/137411332
+
+/*
+Diameter of Tree - the number of nodes on the longest path between two end nodes.
+*/
+
+
+#include <bits/stdc++.h>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+using namespace std;
+
+void dfs(int node, int par,int dis,int &far, int &far_node, vector<int>tree[]){
+
+  
+    if(far<dis){
+        far = dis;
+        far_node = node;
+    }
+
+ 
+    for(auto nbr:tree[node]){
+        if(nbr==par)continue;
+        dfs(nbr, node, dis+1, far, far_node,tree);
+    }
+    
+}
+
+int32_t main()
+{
+    int i,n,m;
+    cin>>n>>m;
+
+    vector<int>tree[n+1];
+
+    for(i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+
+        tree[u].push_back(v);
+        tree[v].push_back(u);
+    }
+
+    int farthest_node=-1, far=-1;
+
+    dfs(1,-1,0, far, farthest_node, tree ); //we found one of the farthest node -> lying on the one of the end of diameter of tree 
+
+    // watch(farthest_node);
+    
+    far=0;
+    dfs(farthest_node,-1,0, far, farthest_node, tree ); //other node of the diameter of tree-> will be unique as it will be situated on the other end of longest path
+
+    cout<<far<<endl;
+   
+}
