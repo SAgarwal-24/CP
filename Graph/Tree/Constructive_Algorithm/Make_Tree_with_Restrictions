@@ -1,0 +1,78 @@
+//https://codeforces.com/contest/1586/problem/B - Heavenly Tree
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define endl '\n' 
+#define int long long 
+#define ll long long 
+#define pi (3.141592653589) 
+#define mod 1000000007 
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define INF 2e18
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define watch(x) cout << (#x) << " -> "  << (x) << endl
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) ((ll)(x).size())
+#define inputarr(arr, n) for (ll i = 0; i < n; i++) cin >> arr[i];
+#define printarr(arr, n) for (ll i = 0; i < n; i++) cout << arr[i] << ' ';
+ 
+/*
+-> editorial is enough to understand
+-> Trick: Since this question is full of restrictions (head stopped working...xd)
+        -> so observation which saved life : find node which is not restricted in any of m restrictions
+        -> in a restriction -> a,b,c -> node 'b' is restricted 
+        -> since m<n ie there always exist atleast one node which is not restricted
+        -> key help: In a star graph
+                    -> this un-restricted node (as central node)
+                    -> will be only node b/w any 2 pairs of leaf nodes
+                    -> and those 2 leaf nodes are happy  in having this node b/w them
+                    -> as they get rid of enemy node ('b') 
+
+*/
+void solve() {
+     int i, n, m; 
+     cin>>n>>m;
+     
+     vi enemy_node(n+1,0);
+
+     for(i=0;i<m;i++){
+         int a,b,c;
+         cin>>a>>b>>c;
+
+         enemy_node[b] = 1;
+     }
+
+    int star_node = -1;
+
+    for(i=1; i<=n; i++){
+        if(enemy_node[i]==0){
+            star_node = i;
+            break;
+        }
+    }
+
+    for(i=1;i<=n;i++){
+        if(star_node==i)continue;
+
+        cout<<i<<" "<<star_node<<endl;
+    }
+}
+
+ 
+int32_t main()
+{
+    fast_cin();
+    ll tc=1;
+    cin >> tc;
+    while (tc--) 
+     {
+        solve();
+     }
+    return 0;
+}
