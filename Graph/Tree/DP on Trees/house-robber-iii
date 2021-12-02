@@ -1,0 +1,47 @@
+//link: https://leetcode.com/problems/house-robber-iii/
+
+class Solution {
+public:
+    
+    int g=0;
+    
+     map<pair<TreeNode*,int>,int>dp;
+    
+    int f(TreeNode* root, int inc){  //inc-include
+        
+        // g++;
+        
+        if(root==NULL)
+            return 0;
+        
+        if(dp.find({root,inc})!=dp.end())
+            return dp[{root,inc}];
+        
+        int money = root->val;
+        
+        int op1=0, op2=0;
+        
+        if(inc==1)
+        op1 = money+f(root->left,0)+f(root->right,0);
+        
+        op2 = f(root->left,1) + f(root->right,1);
+        
+        return dp[{root,inc}] = max(op1, op2);
+    }
+    
+    int rob(TreeNode* root) {
+        int ans=f(root, 1);
+        
+        // cout<<"g: "<<g<<endl;
+        
+        return ans;
+    }
+};
+
+
+/*
+[3,2,3,null,3,null,1]
+[3,4,5,1,3,null,1]
+[3,4,35,1,33,null,1]
+
+*/
