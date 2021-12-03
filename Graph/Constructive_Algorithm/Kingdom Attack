@@ -1,0 +1,187 @@
+//link: https://www.codechef.com/FZBZ21B/problems/KINGATCK
+//sol: https://www.codechef.com/viewsolution/54633915
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define endl '\n' 
+#define int long long 
+#define ll long long 
+#define pb push_back
+#define vi vector<int>
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+
+
+/*
+
+ Rule 1:  No two adjacent provinces(or nodes) are guarded by X
+ Rule 2:  All y (each and everyone node which is named as y) must be connected with x
+         or in other words:  'all y guarded nodes' should be connected with 'all x guarded nodes'
+
+ Example to understand Rule 2:
+
+    say n=7   ie nodes -> (1,2,3,4,5,6,7)
+
+    and assume nodes-> (1,3,5) -> x 
+               nodes-> (2,4,6,7) -> y 
+
+    so acc. to rule 2 -> all y should be connected to  all x
+
+    so -> 1 is connected to all '4 y nodes' ie  1 ---- (2,4,6,7)
+       -> 3 is connected to all '4 y nodes' ie  3 ---- (2,4,6,7)
+       -> 5 is connected to all '4 y nodes' ie  5 ---- (2,4,6,7)
+
+    but 1,3,5 are not connected to each other (acc. to rule 1 -> x can't with each other)
+    also there is no restriction on 'y nodes' they are free to connect among themselves
+
+    So graph looks like below
+              ->  where set of y nodes (2,4,6,7) makes a component of size = 4
+              ->  1,3,5 makes 3 independent complete components (or complete graph) of size=1 
+
+               5
+               |
+               |
+    1 ---- (2,4,6,7) ----3
+
+##  Approach_intuition  ##
+
+-> So we get a brute force intuition that we pick a random node 
+-> and check whether we can consider it as guarded by 'x'
+-> so for each of 'n' nodes we have to check configuration for all 'n' nodes
+-> which definitely makes it more than O(n^2) 
+
+# Efficient approach (complement of graph)
+-> now define a new graph (ie new relation) where nodes are connected if they are disconnected in original graph
+
+
+-> for eg in sample tc complement graph will be as below
+           
+************************************************
+
+Analysing sample tc with complement approach:
+       
+        x->(1,6) and y->(2,4,5,3)
+
+    - there are 2 components of 'x' and 'y'
+    - for 'x' component -> we can safely connect (1,6) bcz they are not adjacent in original graph as they are disconnected
+    
+Some more proofs (considering sample tc)
+
+Proof 1:
+   - say for component (1,6) 
+   - assume node=1 as 'x' 
+   - and    node=6 as 'y' (instead of 'x') 
+   
+   - now since (1,6) are disconnected in original graph 
+   - (x,y) will be disconnected which violates rule 2 (as all y must be connected with all x)
+   - so  both node 1 and 6 will be 'x' only 
+
+Proof 2:
+   - say for component (2,4,5,3)
+   - assume node=2 as 'x' (instead of 'y')
+
+   - then acc. to our assumption 
+               node=4 and node=5 can't be 'y' as they are disconnected (in original graph) 
+       hence , node=4 and node=5 must be 'x' too 
+
+       -now since node=5 is 'x' and 
+       -edge b/w '5' and '3' is broken (both are disconnected in original graph)
+       -so node '3' can't be 'y' (acc to rule 2)
+       
+       - so node '3' is 'x' too
+       - so all (2,4,5,3) turn-up to be 'x'
+       - but we can see (2,3) , (3,4) are still connected or adjacent in original graph (which violates rule 1)
+    
+    hence our assumption is wrong and node=2 can't be 'x' 
+
+
+    Conclusion: a node can be consider 'x' (in complement graph) 
+                iff all the nodes are connected in complement graph ie making a complete graph
+                bcz a 'complete component in complement graph' is equivalent 'to complete disconnected component in original graph' 
+                which successfully satisfies RULE-1
+
+                - also at a time out of 'm' complete components of complement graph 
+                  we need to consider only 1 complete component as set of 'x' nodes
+                  bcz if consider for more than 1 component it violates rule 1 again ie 'x' nodes will be adjacent again
+
+
+graph looks like below:
+
+        x:      1--6
+
+        y:      2----4
+                 \  /
+                   5---3
+
+*/
+ 
+void dfs(int node, int &node_cnt, int &edge_cnt, int vis[], vi comp_gr[]){
+
+    vis[node]=1;
+
+    node_cnt += 1;
+
+    for(auto nbr: comp_gr[node]){
+
+        edge_cnt ++;
+
+        if(vis[nbr]==1)continue;
+
+        dfs(nbr, node_cnt, edge_cnt, vis, comp_gr);
+    }
+}
+
+void solve() {
+     int i, n, destroyed_edges ; 
+     cin>>n>>destroyed_edges;
+
+     vi comp_gr[n+1]; // complement graph
+
+     for(i=1;i<=destroyed_edges;i++){
+         int u,v;
+         cin>>u>>v; //u,v will be disconneted in original graph
+
+         comp_gr[u].pb(v);
+         comp_gr[v].pb(u);
+     }
+
+
+     int no_of_ways=0;
+
+     int vis[n+1]={0};
+
+     for(int node=1; node<=n; node++){
+
+        if(vis[node]==1)continue;
+
+        int node_cnt=0;                  //no of nodes in a component
+        int edge_cnt=0;                  //no of edges in a component 
+
+        dfs(node, node_cnt ,edge_cnt, vis, comp_gr); //each edge will be counted twice actually
+
+        // in a complete component of 'n' nodes there are (n*(n-1)/2) edges
+
+      
+        int rem_cnt = n-node_cnt; //nodes which are not included in component 
+        //since there is a rule 3 that both 'x' and 'y' has atleast one node assigned
+
+        if(rem_cnt>0 and  (node_cnt*(node_cnt-1))/2 == edge_cnt/2  ){
+            no_of_ways ++ ;
+        }
+     }
+
+     cout<<no_of_ways<<endl;
+}
+
+ 
+int32_t main()
+{
+    fast_cin();
+    ll tc=1;
+    cin >> tc;
+    while (tc--) 
+     {
+        solve();
+     }
+    return 0;
+}
