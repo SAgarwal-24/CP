@@ -1,0 +1,86 @@
+// link: https://codeforces.com/problemset/problem/1143/C
+// sol: https://codeforces.com/contest/1143/submission/137850121
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define endl '\n' 
+#define int long long 
+#define ll long long 
+#define pb push_back
+#define vi vector<int>
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+
+
+const int N = 1e5+5;
+
+vi respect(N);
+vi tree[N];
+
+set<int>ans;
+
+void dfs(int node){
+
+    int c=0;
+
+    for(auto child: tree[node]){
+
+        c += respect[child];
+        dfs(child);
+    }
+
+
+    if(c==tree[node].size() and respect[node]==1){
+        ans.insert(node);
+    }
+
+}
+
+
+void solve() {
+     int i, n; 
+     cin>>n;
+
+    int root=-1;
+
+     for(i=1;i<=n;i++){
+        int par,r;
+        cin>>par>>r;
+
+         if(par==-1)
+          {
+              root = i;
+              continue;
+          }
+
+        tree[par].pb(i);
+        respect[i] = r;
+
+       
+     }
+
+
+     dfs(root);
+
+     if(ans.size()==0){
+         cout<<-1<<endl;
+         return;
+     }
+
+     for(auto x:ans){
+         cout<<x<<" ";
+     }
+}
+
+ 
+int32_t main()
+{
+    fast_cin();
+    ll tc=1;
+    // cin >> tc;
+    while (tc--) 
+     {
+        solve();
+     }
+    return 0;
+}
