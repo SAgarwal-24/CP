@@ -1,0 +1,132 @@
+//link: https://codeforces.com/contest/690/problem/C1
+
+//using dsu for fun..xd 
+//just check it is a connected tree or not using dsu
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define endl '\n' 
+#define int long long 
+#define ll long long 
+#define pi (3.141592653589) 
+#define mod 1000000007 
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define INF 2e18
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define watch(x) cout << (#x) << " -> "  << (x) << endl
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) ((ll)(x).size())
+#define inputarr(arr, n) for (ll i = 0; i < n; i++) cin >> arr[i];
+#define printarr(arr, n) for (ll i = 0; i < n; i++) cout << arr[i] << ' ';
+
+class tree{
+
+    int v;
+    int *par;
+    int *rank;
+
+    int num_of_components=0;
+
+  public:
+    tree(int v){
+        this->v = v;
+        num_of_components = v;
+        par = new int[v+1];
+        rank  = new int[v+1];
+
+        for(int i=1;i<=v;i++)
+            par[i] = -1,  rank[i] = 1;
+        
+    }
+
+    int findset(int u){
+
+        if(par[u]<0)
+            return u;
+    
+         return par[u] = findset(par[u]);
+    }
+
+    void union_set(int u, int v){
+
+        u = findset(u);
+        v = findset(v);
+
+        if(u==v)return;
+
+        num_of_components --;
+
+        if(rank[u] > rank[v]){
+            par[v] = u;
+            rank[u] += rank[v];
+        }
+        else{
+            par[u] = v;
+            rank[v] += rank[u];
+        }
+    }
+
+    int components(){
+        return num_of_components;
+    }
+
+    bool same_component (int u, int v){
+        return findset(u) == findset(v);
+    }
+
+    void print(){
+
+        for(int i=1; i<=v; i++){
+            cout<<par[i]<<" - "<<i<<endl;
+        }
+
+        cout<<"----\n";
+    }
+};
+ 
+
+void solve() {
+     int i, n, m; 
+     cin>>n>>m;
+
+     tree g(n);
+     bool ok = false;
+
+    for(i=1;i<=m;i++){
+        int u,v;
+        cin>>u>>v;
+
+        ok = ok | (g.same_component(u,v));
+
+        g.union_set(u,v);
+    }
+
+    ok = ok | (g.components()>1); //for a disconnected graph - property-1 is false
+
+    if(ok){
+        cout<<"no";
+        return;
+    }
+
+    cout<<"yes";
+
+}
+
+ 
+int32_t main()
+{
+    fast_cin();
+    ll tc=1;
+    // cin >> tc;
+    while (tc--) 
+     {
+        solve();
+     }
+    return 0;
+}
