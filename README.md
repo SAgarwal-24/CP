@@ -1,3 +1,83 @@
+# DSU MY TEMPLATE
+
+```
+class tree {
+
+    int num_components;
+    int nodes;
+    int *par, *rank; //rank -> is size of component
+
+ public:
+    tree(int n){
+        this->nodes = n;
+        num_components = n;
+
+        par = new int[n+1];
+        rank = new int[n+1];
+
+        for(int i=1; i<=n; i++)
+         par[i] = -1,  rank[i] = 1;
+    }
+
+    
+
+    int findset(int u){
+
+        if(par[u]<0)
+            return u;
+
+        return par[u] = findset(par[u]); //path compression
+    }
+
+    void union_set(int u, int v){
+
+        u = findset(u);
+        v = findset(v);
+
+        if(u==v)return;
+
+        if(rank[u]>rank[v]){ //merge smaller into bigger
+            par[v] = u; 
+            rank[u]+=rank[v];
+            rank[v]=0;
+        }
+        else{
+            par[u] = v;
+            rank[v] += rank[u];
+            rank[u] = 0;
+        }
+    }
+
+    int getSize(int u){  //to find size of a component 
+
+        return rank[findset(u)];
+    }
+
+     void print(){
+
+        for(int i=1; i<=nodes; i++){
+            cout<<par[i]<<" - "<<i<<endl;
+        }
+
+        cout<<"----\n";
+    }
+
+    void print_rank(){
+
+        for(int i=1; i<=nodes; i++){
+            cout<<rank[i]<<" ";
+        }
+
+        cout<<"\n----\n";
+    }
+};
+
+```
+
+
+
+
+
 # (Concept of Modulo Multiplicative Inverse and Fermat little Theorem) 
 # To calculate C(n,r) modulo 10^9+7 
 
