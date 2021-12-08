@@ -1,0 +1,376 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define min3(a, b, c) min(c, min(a, b))
+#define min4(a, b, c, d) min(d, min(c, min(a, b)))
+#define rfo(i, a, b) for (int i = (int)a; i >= (int)b; i--)
+#define fo(i, a, b) for (int i = (int)a; i <= (int)b; i++)
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define see(x) cout << (x) << endl
+#define hh cout << endl
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+ 
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+ 
+class tree{
+    //considering nodes are following 1-based indexing 
+    
+    int n=0, h=0;
+    vi adj[100005];
+    vvi up;
+    vi depth;
+
+    public:
+      
+    tree(int n){
+        this->n = n;
+        this-> h = ceil(log2(n));
+
+        up = vvi (n+1, vi (h, 0));
+        depth = vi (n+1, 0);
+    }
+
+    void add_edge(int u, int v){
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    void dfs(int node,  int par){
+
+        for(auto nbr: adj[node]){
+            if(nbr==par)continue;
+            
+            depth[nbr] = depth[node] + 1;
+            up[nbr][0] = node;
+
+            //precomputation of sparse table for binary lifting
+            for(int j=1; j<h; j++){
+                up[nbr][j] = up[ up[nbr][j-1] ][j-1];
+            }
+
+            dfs(nbr,  node);
+        }
+    }
+
+    int get_kth_ancestor(int node, int k){
+        int p=0;
+
+        while(k){
+            
+            if(k&1){
+                node = up[node][p];
+            }
+
+            k=k>>1;
+            p+=1;
+        }
+
+        return node;
+    }
+
+    void print_info(){
+        
+        //exploring all kth ancestors
+        for(int i=1; i<=n; i++){
+
+            cout<<"node: "<<i<<endl;
+
+            for(int k=1; k<=depth[i]; k++){ 
+
+                cout<<k<<" ancestor of node "<<i<<" is: "<<get_kth_ancestor(i, k)<<endl;
+            }
+        }
+    }
+
+    int lca(int u, int v){
+
+        if(depth[u]>depth[v])
+          swap(u,v);
+
+        //bring u,v to same lvl 
+        int k = depth[v]-depth[u];
+        v = get_kth_ancestor(v, k);
+
+        if(u == v)  
+            return u;
+
+        for(int j=h-1; j>=0; j--){
+            
+            if(up[u][j] != up[v][j]){
+                u = up[u][j];
+                v = up[v][j];
+            }
+        }
+
+        return up[u][0];
+    }
+
+    void lca_of_all_pairs(){
+
+        for(int u=1; u<=n; u++){
+            for(int v=1; v<=n; v++){
+
+                if(u==v)continue;
+
+                cout<<"lca of "<<u<<","<<v<<": "<<lca(u,v)<<endl;
+
+            }
+
+            cout<<endl;
+        }
+    }
+};
+
+
+
+
+ void solve(){
+
+     int i, n, j, k;
+     cin>>n;
+
+    tree g(n);
+
+     for(i=1;i<n;i++){
+         int u,v;
+         cin>>u>>v;
+         
+        g.add_edge(u,v);
+     }
+
+    g.dfs(1, 0);
+
+    // g.print_info(); //all ancestors for each of node
+
+    g.lca_of_all_pairs();
+}
+
+// Fuck rating 
+// enjoy process and improvement(by red coders like colin)
+ 
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+ 
+ 
+    while (tc--)
+    {
+        solve();
+    }
+ 
+ 
+    return 0;
+}
+
+/*
+
+Analysis of a INPUT
+
+    I/P:
+    10 
+    1 2
+    1 5
+    2 3
+    5 6
+    5 7
+    3 8
+    3 4
+    4 9
+    7 10
+
+    //sparse table for binary lifting 
+
+         1 2 4 8 16 32 ..
+         0 1 2 3 4 5 6 ......
+	0->  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	1->  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	2->  1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	3->  2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	4->  3 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	5->  1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	6->  5 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	7->  5 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	8->  3 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	9->  4 3 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+	10-> 7 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+
+    
+//node: 1 2 3 4 5 6 7 8 9 10
+ depth: 0 1 2 3 1 2 2 3 4 3 
+
+//ancestors of node (not more than there depth)
+
+node: 1
+node: 2
+1 ancestor of node 2 is: 1
+node: 3
+1 ancestor of node 3 is: 2
+2 ancestor of node 3 is: 1
+node: 4
+1 ancestor of node 4 is: 3
+2 ancestor of node 4 is: 2
+3 ancestor of node 4 is: 1
+node: 5
+1 ancestor of node 5 is: 1
+node: 6
+1 ancestor of node 6 is: 5
+2 ancestor of node 6 is: 1
+node: 7
+1 ancestor of node 7 is: 5
+2 ancestor of node 7 is: 1
+node: 8
+1 ancestor of node 8 is: 3
+2 ancestor of node 8 is: 2
+3 ancestor of node 8 is: 1
+node: 9
+1 ancestor of node 9 is: 4
+2 ancestor of node 9 is: 3
+3 ancestor of node 9 is: 2
+4 ancestor of node 9 is: 1
+node: 10
+1 ancestor of node 10 is: 7
+2 ancestor of node 10 is: 5
+3 ancestor of node 10 is: 1
+
+----------lca for all  pairs of nodes---------
+lca of 1,2: 1
+lca of 1,3: 1
+lca of 1,4: 1
+lca of 1,5: 1
+lca of 1,6: 1
+lca of 1,7: 1
+lca of 1,8: 1
+lca of 1,9: 1
+lca of 1,10: 1
+
+lca of 2,1: 1
+lca of 2,3: 2
+lca of 2,4: 2
+lca of 2,5: 1
+lca of 2,6: 1
+lca of 2,7: 1
+lca of 2,8: 2
+lca of 2,9: 2
+lca of 2,10: 1
+
+lca of 3,1: 1
+lca of 3,2: 2
+lca of 3,4: 3
+lca of 3,5: 1
+lca of 3,6: 1
+lca of 3,7: 1
+lca of 3,8: 3
+lca of 3,9: 3
+lca of 3,10: 1
+
+lca of 4,1: 1
+lca of 4,2: 2
+lca of 4,3: 3
+lca of 4,5: 1
+lca of 4,6: 1
+lca of 4,7: 1
+lca of 4,8: 3
+lca of 4,9: 4
+lca of 4,10: 1
+
+lca of 5,1: 1
+lca of 5,2: 1
+lca of 5,3: 1
+lca of 5,4: 1
+lca of 5,6: 5
+lca of 5,7: 5
+lca of 5,8: 1
+lca of 5,9: 1
+lca of 5,10: 5
+
+lca of 6,1: 1
+lca of 6,2: 1
+lca of 6,3: 1
+lca of 6,4: 1
+lca of 6,5: 5
+lca of 6,7: 5
+lca of 6,8: 1
+lca of 6,9: 1
+lca of 6,10: 5
+
+lca of 7,1: 1
+lca of 7,2: 1
+lca of 7,3: 1
+lca of 7,4: 1
+lca of 7,5: 5
+lca of 7,6: 5
+lca of 7,8: 1
+lca of 7,9: 1
+lca of 7,10: 7
+
+lca of 8,1: 1
+lca of 8,2: 2
+lca of 8,3: 3
+lca of 8,4: 3
+lca of 8,5: 1
+lca of 8,6: 1
+lca of 8,7: 1
+lca of 8,9: 3
+lca of 8,10: 1
+
+lca of 9,1: 1
+lca of 9,2: 2
+lca of 9,3: 3
+lca of 9,4: 4
+lca of 9,5: 1
+lca of 9,6: 1
+lca of 9,7: 1
+lca of 9,8: 3
+lca of 9,10: 1
+
+lca of 10,1: 1
+lca of 10,2: 1
+lca of 10,3: 1
+lca of 10,4: 1
+lca of 10,5: 5
+lca of 10,6: 5
+lca of 10,7: 7
+lca of 10,8: 1
+lca of 10,9: 1
+
+*/
