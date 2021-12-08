@@ -107,7 +107,7 @@ class tree{
 
     void print_info(){
         
-        //exploring all kth ancestors
+        //exploring all kth ancestors for each of the node
         for(int i=1; i<=n; i++){
 
             cout<<"node: "<<i<<endl;
