@@ -1,3 +1,6 @@
+//link: https://leetcode.com/problems/kth-ancestor-of-a-tree-node/
+//other sol link: http://p.ip.fi/1TuY 
+
 #define vi vector<int>
 #define vvi vector<vector<int>>
 
