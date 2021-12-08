@@ -1,0 +1,254 @@
+//link: https://codeforces.com/gym/102694/problem/C
+//video: https://www.youtube.com/watch?v=5ZZELkqmGOo
+//my sol: https://codeforces.com/gym/102694/submission/138457862
+
+//see others code for short and concise code
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define see(x) cout << (x) << endl
+#define hh cout << endl
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+ 
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+ 
+class tree{
+
+    int n=0, h=0;
+    vi adj[300005];
+    vvi up;
+    vi depth;
+
+    public:
+      
+    tree(int n){
+        this->n = n;
+        this-> h = ceil(log2(n));
+
+        up = vvi (n+1, vi (h, 0));
+        depth = vi (n+1, 0);
+    }
+
+    void add_edge(int u, int v){
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    void dfs(int node,  int par){
+
+        for(auto nbr: adj[node]){
+            if(nbr==par)continue;
+            
+            depth[nbr] = depth[node] + 1;
+            up[nbr][0] = node;
+
+            //precomputation of sparse table for binary lifting
+            for(int j=1; j<h; j++){
+                up[nbr][j] = up[ up[nbr][j-1] ][j-1];
+            }
+
+            dfs(nbr,  node);
+        }
+    }
+
+    int get_kth_ancestor(int node, int k){
+        int p=0;
+
+        while(k){
+            
+            if(k&1){
+                node = up[node][p];
+            }
+
+            k=k>>1;
+            p+=1;
+        }
+
+        return node;
+    }
+
+    void print_info(){
+        
+        //exploring all kth ancestors
+        for(int i=1; i<=n; i++){
+
+            cout<<"node: "<<i<<endl;
+
+            for(int k=1; k<=depth[i]; k++){ 
+
+                cout<<k<<" ancestor of node "<<i<<" is: "<<get_kth_ancestor(i, k)<<endl;
+            }
+        }
+    }
+
+    int lca(int u, int v){
+
+        if(depth[u]>depth[v])
+          swap(u,v);
+
+        //bring u,v to same lvl 
+        int k = depth[v]-depth[u];
+        v = get_kth_ancestor(v, k);
+
+        if(u == v)  
+            return u;
+
+        for(int j=h-1; j>=0; j--){
+            
+            if(up[u][j] != up[v][j]){
+                u = up[u][j];
+                v = up[v][j];
+            }
+        }
+
+        return up[u][0];
+    }
+
+    int distance(int a, int b){ 
+        //distance b/w pair of nodes 'a' and 'b'
+
+        return depth[a] + depth[b] - 2*depth[lca(a,b)];
+    }
+
+    void lca_of_all_pairs(){
+
+        for(int u=1; u<=n; u++){
+            for(int v=1; v<=n; v++){
+
+                if(u==v)continue;
+
+                cout<<"lca of "<<u<<","<<v<<": "<<lca(u,v)<<endl;
+
+            }
+
+            cout<<endl;
+        }
+    }
+
+    void dis_of_all_pairs(){
+
+        for(int u=1; u<=n; u++){
+            for(int v=1; v<=n; v++){
+
+                if(u==v)continue;
+
+                cout<<"dist b/w "<<u<<","<<v<<": "<<distance(u,v)<<endl;
+
+            }
+
+            cout<<endl;
+        }
+    }
+};
+
+
+
+
+ void solve(){
+
+     int i, n, j, k;
+     cin>>n;
+
+    tree g(n);
+
+     for(i=1;i<n;i++){
+         int u,v;
+         cin>>u>>v;
+         
+        g.add_edge(u,v);
+     }
+
+    g.dfs(1, 0);
+
+    int q;
+    cin>>q;
+
+    for(i=0;i<q;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+
+        int dis = g.distance(a,b);
+
+        if(dis==0){
+            cout<<a<<endl;
+            continue;
+        }
+
+        int lca = g.lca(a,b);
+
+        int p1 = g.distance(a, lca);
+        
+        if(c<=p1){
+           cout<< g.get_kth_ancestor(a, c) <<endl;
+           continue;
+        }
+
+        int p2 = dis - c;
+
+        if(p2<=0){
+            cout<<b<<endl;
+            continue;
+        }
+
+        cout<<g.get_kth_ancestor(b, p2)<<endl;
+    }
+    
+    
+}
+
+// Fuck rating 
+// enjoy process and improvement(by red coders like colin)
+ 
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+ 
+ 
+    while (tc--)
+    {
+        solve();
+    }
+ 
+ 
+    return 0;
+}
+
