@@ -1,0 +1,260 @@
+//link: https://codeforces.com/contest/519/problem/E
+//sol: https://codeforces.com/contest/519/submission/138484512
+
+//editorial is good
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define min3(a, b, c) min(c, min(a, b))
+#define min4(a, b, c, d) min(d, min(c, min(a, b)))
+#define rfo(i, a, b) for (int i = (int)a; i >= (int)b; i--)
+#define fo(i, a, b) for (int i = (int)a; i <= (int)b; i++)
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define see(x) cout << (x) << endl
+#define hh cout << endl
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+ 
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+ 
+class tree{
+
+    int n=0, h=0;
+    vvi adj;
+    vvi up;
+    vi depth;
+    vi subtree_size;
+
+    public:
+      
+    tree(int n){
+        this->n = n;
+        this-> h = ceil(log2(n)) + 1;
+
+        adj = vvi (n+1);
+        up = vvi (n+1, vi (h, 0));
+        depth = vi (n+1, 0);
+        subtree_size = vi(n+1, 0);
+    }
+
+    void add_edge(int u, int v){
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    int dfs(int node, int par=0){
+        
+        int si=1;
+
+        for(auto nbr: adj[node]){
+
+            if(nbr==par)continue;
+
+            depth[nbr] = depth[node] + 1;
+            
+
+            //precomputation for binary lifting
+            up[nbr][0] = node;
+            for(int j=1; j<h; j++){ 
+                up[nbr][j] = up[ up[nbr][j-1]  ][j-1];
+            }
+
+            si += dfs(nbr, node);
+        }
+
+        return subtree_size[node] = si;
+    }
+
+    int get_kth_ancestor(int node, int k){
+
+        if(k>depth[node])
+            return 0;
+
+        int p=0;
+        while(k){
+            
+            if(k&1)
+              node = up[node][p];
+
+            k = k>>1;
+            p +=1;
+        }
+
+        return node;
+    }
+
+    int lca(int u,int v){
+
+        if(depth[u]>depth[v])
+            swap(u,v);
+
+        int k=depth[v]-depth[u];
+        v = get_kth_ancestor(v, k);
+
+        if(u==v)
+            return u;
+
+        for(int j=h-1; j>=0; j--){
+
+            if(up[u][j] != up[v][j]){
+                u = up[u][j];
+                v = up[v][j];
+            }
+        }
+
+        return up[u][0];
+    }
+
+    int distance(int u, int v){
+
+        return depth[u] + depth[v] - 2*depth[lca(u,v)];
+    }
+    
+    int size_subtree(int u){
+        return subtree_size[u];
+    }
+
+    void print_subtree(){
+       cout<<subtree_size<<endl;
+    }
+};
+
+
+
+
+ void solve(){
+
+     int i, n, j, k;
+     cin>>n;
+
+    tree g(n);
+
+     for(i=1;i<n;i++){
+         int u,v;
+         cin>>u>>v;
+         
+        g.add_edge(u,v);
+     }
+
+    g.dfs(1);
+
+    int q;
+    cin>>q;
+
+    for(i=0;i<q;i++){
+        int u,v;
+        cin>>u>>v;
+
+        int d = g.distance(u, v); //O(1)
+
+        if(d==0){
+            cout<<n<<endl;
+            continue;
+        }
+        
+        if( (d&1) ){
+            cout<<0<<endl;
+            continue;
+        }
+
+        int lca = g.lca(u, v); // O(log(n))
+
+        int d1 = g.distance(u, lca); 
+
+        int ans=0;
+        
+      
+
+        if(d1 == d/2){
+            //lca is the mid node
+
+            //nodes just below lca and in path of 'u' and 'v'
+            u = g.get_kth_ancestor(u, d1-1);
+            v = g.get_kth_ancestor(v, d1-1);
+
+            //remove the nodes which are not equidistant to original 'u' and 'v'
+            ans = n - g.size_subtree(u) - g.size_subtree(v);
+        }
+        else{
+            //lca is not the mid node 
+            int mid_node=-1;
+
+            if(d1<(d/2)){
+                //mid node lies b/w 'v' and 'lca'
+                swap(u,v);
+            }
+
+
+            //at this point, mid node lies b/w 'u' and 'lca'
+            mid_node = g.get_kth_ancestor(u, d/2);
+            
+            ans = g.size_subtree(mid_node);
+         
+            u = g.get_kth_ancestor(u, (d/2)-1);
+
+            //remove the nodes which are not equidistant to original 'u' and 'v'
+            ans = ans - g.size_subtree(u);
+        }
+
+        cout<<ans<<endl;
+    }
+    
+    
+}
+
+// Fuck rating 
+// enjoy process and improvement(by red coders like colin)
+ 
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+ 
+ 
+    while (tc--)
+    {
+        solve();
+    }
+ 
+ 
+    return 0;
+}
+ 
