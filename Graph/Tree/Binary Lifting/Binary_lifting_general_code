@@ -7,8 +7,8 @@
   n->no of nodes in tree
   
   for precomputation we have O(nlog(n)) 
-  bcz for each of 'n' nodes we are storing log(n) parents
-  at different milestones
+  bcz for each of 'n' nodes we are storing "log(n) parents" (log(n) is upper bound not exact) 
+  at different milestones, in such a way that we can reach all of its parents
  
 */
 
