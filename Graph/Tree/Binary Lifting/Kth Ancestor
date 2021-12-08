@@ -1,0 +1,116 @@
+#define vi vector<int>
+#define vvi vector<vector<int>>
+
+class TreeAncestor {
+    
+    int h=0, i=0;
+    vvi up;
+    
+public:
+    
+    TreeAncestor(int n, vector<int>& parent) {
+        
+        while((1LL<<h) <= n){
+            h++;
+        }
+        
+        // cout<<"h: "<<h<<endl;
+        
+        up = vvi (n, vi (h,-1));
+        
+        
+        //sparse table for binary lifting
+        
+        for(int node=0; node<n; node++){
+            up[node][0] = parent[node];
+        }
+        
+        
+        for(int j=1; j<h; j++){
+        //all 2^j ancestor of node are explored
+            
+         for(int node=0;node<n; node++){  
+             
+               // cout<<up[node][j-1]<<" ";                 
+                if(up[node][j-1] == -1)
+                    up[node][j] = -1;
+                else
+                    up[node][j] = up[ up[node][j-1] ][j-1];
+            }
+            
+            // cout<<endl;
+        }
+        
+        /* print the sparse table of binary lifting 
+        
+        for(int node=0; node<n; node++){
+            
+            cout<<node<<"-> ";
+            for(int j=0;j<h;j++){
+                cout<<up[node][j]<<" ";
+            }
+            cout<<endl;
+        }
+        */
+    }
+    
+   
+    
+    
+    int getKthAncestor(int node, int k) {
+        
+        // k = 2^p1 + 2^p2 .... find p1, p2 .. ancestors of node to get kth ancestor
+        int p=0;
+        while(k){
+            
+            if(k&1){
+                node = up[node][p];
+            }
+            
+            if(node==-1)return -1;
+            
+            k=k>>1;
+            p+=1;
+        }
+        
+        return node;
+    }
+};
+
+
+/**
+
+For below type of input where order is not proper
+
+         0
+        /
+       3
+      /
+     2
+    /
+   1
+   
+ while making binary lifting sparse table for 'node=1
+ we need information of 'node=2', 'node=3' but they are not updated still , 
+ so we can't explore all ancestors of node=1 expect 1st ancestor ie parent
+ 
+ so we first store information of 1st parent in 1st go 
+                             then 2nd parent in 2nd go ... and so on
+
+["TreeAncestor","getKthAncestor","getKthAncestor","getKthAncestor"]
+[[4,[-1,2,3,0]],[2,3],[2,2],[2,1]]
+
+
+
+--------------
+
+["TreeAncestor","getKthAncestor","getKthAncestor","getKthAncestor"]
+[[4,[-1,2,3,0]],[2,3],[2,2],[2,1]]
+
+
+ * Your TreeAncestor object will be instantiated and called as such:
+ * TreeAncestor* obj = new TreeAncestor(n, parent);
+ * int param_1 = obj->getKthAncestor(node,k);
+ 
+ 
+ */
