@@ -53,7 +53,7 @@ std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
 class tree{
 
     int n=0, h=0;
-    vi adj[100005];
+    vvi adj; 
     vvi up;
     vi depth;
 
@@ -62,7 +62,8 @@ class tree{
     tree(int n){
         this->n = n;
         this-> h = ceil(log2(n));
-
+	
+	adj = vvi (n+1);
         up = vvi (n+1, vi (h, 0));
         depth = vi (n+1, 0);
     }
