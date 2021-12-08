@@ -51,8 +51,7 @@ std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
 }
  
 class tree{
-    //considering nodes are following 1-based indexing 
-    
+
     int n=0, h=0;
     vi adj[100005];
     vvi up;
@@ -143,6 +142,12 @@ class tree{
         return up[u][0];
     }
 
+    int distance(int a, int b){ 
+        //distance b/w pair of nodes 'a' and 'b'
+
+        return depth[a] + depth[b] - 2*depth[lca(a,b)];
+    }
+
     void lca_of_all_pairs(){
 
         for(int u=1; u<=n; u++){
@@ -151,6 +156,21 @@ class tree{
                 if(u==v)continue;
 
                 cout<<"lca of "<<u<<","<<v<<": "<<lca(u,v)<<endl;
+
+            }
+
+            cout<<endl;
+        }
+    }
+
+    void dis_of_all_pairs(){
+
+        for(int u=1; u<=n; u++){
+            for(int v=1; v<=n; v++){
+
+                if(u==v)continue;
+
+                cout<<"dist b/w "<<u<<","<<v<<": "<<distance(u,v)<<endl;
 
             }
 
@@ -176,11 +196,12 @@ class tree{
         g.add_edge(u,v);
      }
 
-    g.dfs(1, 0);
+      g.dfs(1, 0);
 
     // g.print_info(); //all ancestors for each of node
 
-    g.lca_of_all_pairs();
+    // g.lca_of_all_pairs();
+       g.dis_of_all_pairs();
 }
 
 // Fuck rating 
@@ -372,5 +393,107 @@ lca of 10,6: 5
 lca of 10,7: 7
 lca of 10,8: 1
 lca of 10,9: 1
+
+----------- distance b/w all pairs of node(a,b) -----
+
+dist b/w 1,2: 1
+dist b/w 1,3: 2
+dist b/w 1,4: 3
+dist b/w 1,5: 1
+dist b/w 1,6: 2
+dist b/w 1,7: 2
+dist b/w 1,8: 3
+dist b/w 1,9: 4
+dist b/w 1,10: 3
+
+dist b/w 2,1: 1
+dist b/w 2,3: 1
+dist b/w 2,4: 2
+dist b/w 2,5: 2
+dist b/w 2,6: 3
+dist b/w 2,7: 3
+dist b/w 2,8: 2
+dist b/w 2,9: 3
+dist b/w 2,10: 4
+
+dist b/w 3,1: 2
+dist b/w 3,2: 1
+dist b/w 3,4: 1
+dist b/w 3,5: 3
+dist b/w 3,6: 4
+dist b/w 3,7: 4
+dist b/w 3,8: 1
+dist b/w 3,9: 2
+dist b/w 3,10: 5
+
+dist b/w 4,1: 3
+dist b/w 4,2: 2
+dist b/w 4,3: 1
+dist b/w 4,5: 4
+dist b/w 4,6: 5
+dist b/w 4,7: 5
+dist b/w 4,8: 2
+dist b/w 4,9: 1
+dist b/w 4,10: 6
+
+dist b/w 5,1: 1
+dist b/w 5,2: 2
+dist b/w 5,3: 3
+dist b/w 5,4: 4
+dist b/w 5,6: 1
+dist b/w 5,7: 1
+dist b/w 5,8: 4
+dist b/w 5,9: 5
+dist b/w 5,10: 2
+
+dist b/w 6,1: 2
+dist b/w 6,2: 3
+dist b/w 6,3: 4
+dist b/w 6,4: 5
+dist b/w 6,5: 1
+dist b/w 6,7: 2
+dist b/w 6,8: 5
+dist b/w 6,9: 6
+dist b/w 6,10: 3
+
+dist b/w 7,1: 2
+dist b/w 7,2: 3
+dist b/w 7,3: 4
+dist b/w 7,4: 5
+dist b/w 7,5: 1
+dist b/w 7,6: 2
+dist b/w 7,8: 5
+dist b/w 7,9: 6
+dist b/w 7,10: 1
+
+dist b/w 8,1: 3
+dist b/w 8,2: 2
+dist b/w 8,3: 1
+dist b/w 8,4: 2
+dist b/w 8,5: 4
+dist b/w 8,6: 5
+dist b/w 8,7: 5
+dist b/w 8,9: 3
+dist b/w 8,10: 6
+
+dist b/w 9,1: 4
+dist b/w 9,2: 3
+dist b/w 9,3: 2
+dist b/w 9,4: 1
+dist b/w 9,5: 5
+dist b/w 9,6: 6
+dist b/w 9,7: 6
+dist b/w 9,8: 3
+dist b/w 9,10: 7
+
+dist b/w 10,1: 3
+dist b/w 10,2: 4
+dist b/w 10,3: 5
+dist b/w 10,4: 6
+dist b/w 10,5: 2
+dist b/w 10,6: 3
+dist b/w 10,7: 1
+dist b/w 10,8: 6
+dist b/w 10,9: 7
 
 */
