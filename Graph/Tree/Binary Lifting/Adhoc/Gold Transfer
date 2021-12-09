@@ -1,0 +1,148 @@
+//link: https://codeforces.com/contest/1535/problem/E
+//sol:https://codeforces.com/contest/1535/submission/138581738
+
+/*
+  - kind of binary search notion -> where gold from top  to bottom is removed -> as cost increases from top to bottom
+  - see others code too
+  - use "endl" instead of "\n" otherwise idleness limit exceeded
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+// #define endl "\n"
+#define int long long
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+ 
+
+
+class tree{
+
+
+    int n=300002, h=0;
+    // vvi adj;
+    vvi up;
+
+    public:
+
+    vi  qty, cost;
+      
+    tree(){
+        
+        this-> h = ceil(log2(n)) + 1;
+        
+        // adj = vvi (n+1);  no use of adjacency list
+        up    = vvi (n+1, vi (h));
+        qty   = vi(n+1);
+        cost  = vi(n+1);
+       
+    }
+
+
+
+    void update_table(int node, int par, int wt, int c){
+
+        up[node][0] = par;
+        qty[node]   = wt;
+        cost[node]  = c;
+        // cout<<node<<", "<<par<<endl;
+
+        for(int j=1; j<h; j++){
+
+            if(up[node][j-1] == -1)
+                up[node][j] = -1;
+            else 
+                up[node][j] = up[ up[node][j-1] ][j-1];
+        }
+    }
+
+   
+    int find_BestFarthest_ancestor(int node){
+
+        //find best farthest ancestor ie ancestor having some gold left 
+        // and this ancestor will give gold at cheapest price;
+
+        for(int j=h-1; j>=0; j--){
+
+            if(up[node][j]!=-1 and qty[up[node][j]]>0){
+                node = up[node][j];
+            }
+        }
+
+        return node;
+    }
+
+   
+};
+
+
+
+
+// Fuck rating 
+// enjoy process and improvement(by red coders like colin)
+ 
+int32_t main()
+{
+    fast 
+    
+    
+   int q, a, c, i;
+
+   tree g;
+
+   cin>>q>>a>>c;
+
+   g.update_table(0, -1, a, c);
+    
+  
+    for(i=1;i<=q;i++){
+        int type;
+        cin>>type;
+
+    
+        if(type==1){
+            //add a vertex i to p
+            int p;
+            cin>>p>>a>>c;
+            g.update_table(i, p, a, c);
+        }
+        else{
+          
+
+            int u,req, best_node=-1, x=0;
+            cin>>u>>req;
+        
+            int spend=0, bought=0;
+
+            while(bought<req){
+               
+                best_node = g.find_BestFarthest_ancestor(u);
+
+                int q = g.qty[best_node];
+
+                int taken = min(q, req-bought);
+
+                bought += taken;
+                spend += taken * g.cost[best_node];
+
+                g.qty[best_node] -= taken;
+                
+    
+
+                if(u == best_node)
+                    break;
+
+            }
+
+            cout<<bought<<" "<<spend<<endl;
+            fflush(stdout);
+        }
+    }
+
+ 
+    return 0;
+}
+
