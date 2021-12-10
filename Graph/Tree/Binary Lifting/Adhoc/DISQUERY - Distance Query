@@ -1,5 +1,6 @@
 //link: https://www.spoj.com/problems/DISQUERY/
 //sol: https://ideone.com/v5O3Gq
+//video: https://www.youtube.com/watch?v=Wv1b9oGCK18
 //time: O(nlogn) + O(qlogn)
 
 #include <bits/stdc++.h>
