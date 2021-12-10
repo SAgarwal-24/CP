@@ -1,0 +1,282 @@
+//link: https://www.spoj.com/problems/DISQUERY/
+//sol: https://ideone.com/v5O3Gq
+//time: O(nlogn) + O(qlogn)
+
+#include <bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define int long long
+#define ll long long
+#define pi (3.141592653589)
+#define mod 1000000007
+#define float double
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define all(c) c.begin(), c.end()
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define vpi vector<pair<int,int>>
+#define pii pair<int,int> 
+
+#define watch(x) cout << (#x) << " is " << (x) << endl
+#define INF 1e18
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+ 
+template <typename C,
+          typename T = std::decay_t<decltype(*begin(std::declval<C>()))>,
+          typename std::enable_if<!std::is_same<C, std::string>::value>::type * = nullptr>
+std::ostream &operator<<(std::ostream &os, const C &container)
+{
+    bool first = true;
+    std::stringstream ss;
+    ss << '[';
+    for (const auto &x : container)
+    {
+        if (!first)
+        {
+            ss << ", ";
+        }
+        first = false;
+        ss << x;
+    }
+    ss << ']';
+    return os << ss.str();
+}
+template <class T1, class T2>
+std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p)
+{
+    os << '{' << p.first << ", " << p.second << '}';
+    return os;
+}
+
+/*
+
+say there is a range-> R = [a......x.....b] , a<x<b
+and we need to find minimum of range R 
+ie min(R) = min(a to b) 
+          = min (  min(a to x) , min(x to b))
+
+so this idea is implemented here with help of binary lifting 
+
+ min_len[node][i] = minimum road value from - node to its 2^i ancestor 
+ say range is like -> R = [node .... (2^i)th ancestor .......root ]
+
+ min(R) = min(node to root)
+        = min( min(node to  (2^i)th ancestor  ) , min( (2^i)th ancestor to root ) )
+
+        = min(  min[node][i] ,  min[ (2^i)th ancestor of node ][i-1])
+        = min(  min[node][i] ,  min[    up[node][i]           ][i-1])
+
+ /---------------------- Minimum value of road / wt of edge b/w nodes u and v ------/
+ 
+ let l = lca(u,v)
+
+ min_edge_wt (u,v) = min( min_edge_wt (u to l) , min_edge_wt(v to l))
+
+ similar for max_edge_wt
+
+
+*/
+
+const int N = 1e6+1;
+ 
+class tree{
+
+    int n=0, h=0;
+    map<int, vpi>adj;
+    vvi up;
+    vvi min_len;
+    vvi mxm_len;
+    vi depth;
+   
+    
+
+    public:
+      
+    tree(int n){
+        this->n = n;
+        this-> h = ceil(log2(n)) + 1;
+
+           up   = vvi (n+1, vi (h, 0));
+        min_len = vvi (n+1, vi (h, N));
+        mxm_len = vvi (n+1, vi (h, 0));
+
+        depth = vi (n+1, 0);
+       
+    }
+
+    void add_edge(int u, int v, int len){
+        adj[u].pb({v,len});
+        adj[v].pb({u,len});
+    }
+
+    void dfs(int node, int p=0){
+        
+     
+
+        for(auto par: adj[node]){
+
+            int nbr = par.ff;
+            int len = par.ss;
+
+            if(nbr==p)continue;
+
+            depth[nbr] = depth[node] + 1;
+            
+
+            //precomputation for binary lifting
+            up[nbr][0] = node;
+            min_len[nbr][0] = len;
+            mxm_len[nbr][0] = len;
+
+            for(int j=1; j<h; j++){ 
+                up[nbr][j]      = up[ up[nbr][j-1]  ][j-1];
+
+                min_len[nbr][j] = min(min_len[nbr][j-1], 
+                                      min_len[up[nbr][j-1]][j-1]);
+
+                mxm_len[nbr][j] = max(mxm_len[nbr][j-1], 
+                                      mxm_len[up[nbr][j-1]][j-1]);
+            }
+
+            dfs(nbr, node);
+        }
+
+        
+    }
+
+    pii get_min_max_till_kth_ancestor(int node, int k){
+
+        if(k>depth[node])
+            return {N, 0}; 
+        
+        int mi = N, mx = 0;
+
+        int p=0;
+        while(k){
+            
+            if(k&1){
+                mi = min(mi, min_len[node][p]);
+                mx = max(mx, mxm_len[node][p]);
+                node = up[node][p];
+            }
+              
+
+            k = k>>1;
+            p +=1;
+        }
+
+        return {mi, mx};
+    }
+
+    int get_kth_ancestor(int node, int k){
+
+        if(k>depth[node])
+            return 0;
+
+        int p=0;
+        while(k){
+            
+            if(k&1)
+              node = up[node][p];
+
+            k = k>>1;
+            p +=1;
+        }
+
+        return node;
+    }
+
+    int lca(int u,int v){
+
+        if(depth[u]>depth[v])
+            swap(u,v);
+
+        int k=depth[v]-depth[u];
+        v = get_kth_ancestor(v, k);
+
+        if(u==v)
+            return u;
+
+        for(int j=h-1; j>=0; j--){
+
+            if(up[u][j] != up[v][j]){
+                u = up[u][j];
+                v = up[v][j];
+            }
+        }
+
+        return up[u][0];
+    }
+
+    int distance(int u, int v){
+
+        return depth[u] + depth[v] - 2*depth[lca(u,v)];
+    }
+    
+    void min_max_roads(int u, int v){
+        int l = lca(u, v);
+
+        int k1 = depth[u]-depth[l]; //l is k1 th ancestor of u
+        int k2 = depth[v]-depth[l]; //l is k2 th ancestor of v
+
+        pii p1 = get_min_max_till_kth_ancestor(u, k1);
+        pii p2 = get_min_max_till_kth_ancestor(v,k2);
+
+        cout<<min(p1.ff, p2.ff)<<" "<<max(p1.ss, p2.ss)<<endl;
+    }
+    
+};
+
+
+
+
+ void solve(){
+
+     int i, n, j, k;
+     cin>>n;
+
+    tree g(n);
+
+     for(i=1;i<n;i++){
+        int u,v,len;
+        cin>>u>>v>>len;
+        g.add_edge(u,v,len);
+     }
+
+    g.dfs(1); //O(nlogn)
+
+    int q;
+    cin>>q;
+
+    for(i=0;i<q;i++){   //O(qlogn)
+        int u,v;
+        cin>>u>>v;
+
+        g.min_max_roads( u,  v);
+      
+    }
+    
+    
+}
+
+// Fuck rating 
+// enjoy process and improvement(by red coders like colin)
+ 
+int32_t main()
+{
+    fast int tc = 1;
+    // cin >> tc;
+ 
+ 
+    while (tc--)
+    {
+        solve();
+    }
+ 
+ 
+    return 0;
+}
+
