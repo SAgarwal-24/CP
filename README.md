@@ -84,7 +84,7 @@ class tree {
 ->      C(n,r) %  M
 ->      [n!/((n-r)! . (r!))] % M
 
-we want something like below , but it mathematically wrong
+we want something like below , but it is mathematically wrong
 ->       (n! % M) / ([(n-r)! % M]. [(r!) % M] %M )
 
 so we will do 
@@ -121,6 +121,29 @@ int nCr(int n, int r){
     }
 }
 
+```
+
+alter for C(n,r) modulo MOD
+```
+const int MOD = 998244353;
+
+int add(int x, int y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
+}
+
+ vector<vector<int>> C(n + 1);
+    for(int i = 0; i <= n; i++)
+    {
+        C[i].resize(i + 1);
+        C[i][0] = C[i][i] = 1;
+        for(int j = 1; j < i; j++)
+            C[i][j] = add(C[i - 1][j], C[i - 1][j - 1]);
+    }
+    
 ```
 
 
