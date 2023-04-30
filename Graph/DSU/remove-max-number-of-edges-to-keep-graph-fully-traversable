@@ -1,0 +1,151 @@
+// https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/
+
+class DSU { // union by rank
+
+    int nodes;
+    int numComponents = 0;
+    int *parent, *rank;
+    public:
+
+        DSU(int n) {
+            this -> nodes = n;
+            this -> numComponents = n;
+
+            parent =  new int[n+1];
+            rank   =  new int[n+1];
+
+            for(int i=1; i<=n; i++){
+                parent[i] = -1,  rank[i] = 1;
+            }
+        }
+
+        int findParent( int node ){      // compression
+            return ( parent[node] < 0) ? node : parent[node] = findParent( parent[node] );       
+        }
+
+        int getNumOfComponents(){
+            return numComponents;
+        }
+
+        bool checkNodesConnected(int node1, int node2){
+
+            int par1 = findParent(node1);
+            int par2 = findParent(node2);
+
+            return (par1 == par2);
+        }
+
+        void unionSet(int node1, int node2){
+
+            int par1 = findParent(node1);
+            int par2 = findParent(node2);
+
+            if(par1 == par2){
+                return;
+            }
+
+           this -> numComponents  -- ;
+
+            if( rank[par1] > rank[par2]){
+                parent[par2] = par1;
+                rank[par1] += rank[par2];
+                rank[par2] = 0;
+            }
+            else{
+                parent[par1] = par2;
+                rank[par2] += rank[par1];
+                rank[par1] = 0;
+            }
+        }
+        
+};
+
+/*
+
+alice
+            1   2   3   4
+parent     -1  -1  -1  -1
+rank        1   1   1   1
+
+*/
+
+class Solution {
+public:
+
+    #define vvi vector<vector<int>>
+    #define vi  vector<int>
+
+    /*
+    Obsv.
+    1. We can give preference to type-3 edges
+         - as it can be used by both alice and bob
+         - and hence it decreases total no of edges reqd.
+
+    2. We will remove extra edges to connect any 2 nodes 
+           (and since we give pref. to type-3 its the max. no of edges we can remove as 
+            if we   remove more edges our graph will not fully traversable anymore )
+    
+    */
+
+    void print(vvi &edges){
+
+        int i, n = edges.size();
+
+        for(i=0; i<n; i++){
+            vi temp = edges[i];
+
+            cout<<temp[0]<<", "<<temp[1]<<", "<<temp[2]<<endl;
+        }
+    }
+
+    int maxNumEdgesToRemove(int n, vvi& edges) {
+        
+        sort(edges.begin(), edges.end(), greater<vi>());
+
+        // print(edges);
+
+        int removedEdges = 0;
+        DSU alice(n), bob(n);
+
+        for(vi edge: edges){
+            
+            int type = edge[0];
+            int u    = edge[1];
+            int v    = edge[2];
+
+            // cout<<"process(t,u,v) "<<type<<","<<u<<","<<v<<endl;
+
+            int removeVable = 0 ;
+            if ( (type==3 || type==1) && !alice.checkNodesConnected(u, v) ) {
+                alice.unionSet(u, v);
+            }
+            else{
+                // cout<<u<<" and "<<v<<" already connected for alice \n";
+                removeVable ++;
+            }
+
+            if ( (type==3 || type==2) &&!bob.checkNodesConnected(u, v) ) {
+                bob.unionSet(u, v);
+            }
+            else{
+                // cout<<u<<" and "<<v<<" already connected for bob \n";
+                removeVable ++;
+            }
+
+            if( removeVable == 2){
+                // cout<<"type, u, v: "<<type<<", "<<u<<","<<v<<endl;
+                removedEdges ++;
+            }
+
+            // cout<< alice.getNumOfComponents() <<" # "<< bob.getNumOfComponents()<<endl;
+        }
+
+        // cout<< alice.getNumOfComponents() <<" - "<< bob.getNumOfComponents()<<endl;
+
+        if( alice.getNumOfComponents() != 1 || bob.getNumOfComponents()!=1 ){
+            return -1;
+        }
+
+        return removedEdges;
+    }
+};
