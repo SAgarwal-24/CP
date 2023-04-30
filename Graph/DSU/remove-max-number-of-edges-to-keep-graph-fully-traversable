@@ -142,7 +142,7 @@ public:
 
         // cout<< alice.getNumOfComponents() <<" - "<< bob.getNumOfComponents()<<endl;
 
-        if( alice.getNumOfComponents() != 1 || bob.getNumOfComponents()!=1 ){
+        if( alice.getNumOfComponents() != 1 || bob.getNumOfComponents()!=1 ){ //if all nodes are not connected then it means graph is not traversable
             return -1;
         }
 
