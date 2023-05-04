@@ -1,0 +1,60 @@
+// https://leetcode.com/problems/dota2-senate/description/
+
+class Solution {
+public:
+
+    void print(queue<int>q){
+
+        while(!q.empty()){
+            cout<<(q.front())<<" ";
+            q.pop();
+        }
+
+        cout<<endl;
+    }
+
+    string predictPartyVictory(string senate) {
+        
+        queue<int> rad, dire;
+        int i, n = senate.size();
+
+        for(i=0; i<n; i++){
+            senate[i] == 'R' ? rad.push(i) : dire.push(i);
+        }
+            // cout<<"rad: "; print(rad);
+            // cout<<"dire: "; print(dire);
+            // cout<<"-------\n";
+
+        while(!rad.empty() && !dire.empty()){
+            // winner stays in there queue
+
+            if( rad.front() < dire.front() ){
+                rad.push(n++);
+            }
+            else{
+                dire.push(n++);
+            }
+
+            rad.pop(), dire.pop();
+
+            // cout<<"n : "<<n<<endl;
+            // cout<<"rad: "; print(rad);
+            // cout<<"dire: "; print(dire);
+        }
+       
+        return (!rad.empty()) ? "Radiant": "Dire";
+    }
+};
+
+/*
+
+"RD"
+"RDD"
+"RRD"
+"RDRDDR"
+"R"
+"D"
+"RRRRRD"
+"DDDD RRRR RRRD"
+
+*/
