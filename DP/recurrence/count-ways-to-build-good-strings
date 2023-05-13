@@ -1,0 +1,46 @@
+// https://leetcode.com/problems/count-ways-to-build-good-strings
+class Solution {
+public:
+    int mod = 1e9 + 7;
+    int countGoodStrings(int low, int high, int zero, int one) {
+        
+        long long int dp[100001] = {0};
+        dp[0] = 1;
+
+        long long int goodStrings = 0;
+
+        for(int i=1; i<=high; i++){
+
+            if( i-zero >= 0 ){
+                dp[i] += dp[i-zero]  ;
+            }
+
+            if( i-one >= 0 ){
+                dp[i] += dp[i-one]  ;
+            }
+
+            dp[i] %= mod;
+
+            if(i>=low and i<=high){
+                goodStrings += dp[i] ;
+                goodStrings %= mod;
+            }
+               
+        }
+
+        return goodStrings;
+    }
+};
+
+/*
+
+dp[i] be the number of good strings with length i
+
+dp[0] = 1
+ 
+ observations
+ 1. every good string either ends with zero of 0s or one of 1s,
+  
+  reference link -  https://leetcode.com/problems/count-ways-to-build-good-strings/editorial/
+
+*/
