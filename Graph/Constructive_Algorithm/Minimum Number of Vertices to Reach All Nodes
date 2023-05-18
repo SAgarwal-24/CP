@@ -1,0 +1,27 @@
+// 1557. Minimum Number of Vertices to Reach All Nodes
+class Solution {
+public:
+
+    #define vi vector<int>
+    #define vvi vector<vector<int>> 
+
+    // there is no cycle in graph.
+    // we have to include vertices - with indegree = 0, as there is no other way to reach them
+    vi findSmallestSetOfVertices(int n, vvi & edges) {
+        
+        vi inDegree(n, 0), minSetVertices;
+     
+        for(auto edg: edges){
+            int from = edg[0],  to = edg[1];
+            inDegree[to] += 1 ;       
+        }
+
+        for(int node=0; node<n; node++){
+            if(inDegree[node] == 0){
+                minSetVertices.push_back(node);
+            }
+        }
+
+        return minSetVertices;
+    }
+};
