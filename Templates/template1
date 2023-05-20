@@ -9,10 +9,11 @@ using namespace std;
 #define vi vector<int>
 #define vvi vector<vi>
 #define vd vector<double>
-#define watch(x) cout << (#x) << " -> "  << (x) << endl
-#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((ll)(x).size())
+#define watch(x) cout << (#x) << " -> "  << (x) << endl
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+
 
 /*  explaination 
 
