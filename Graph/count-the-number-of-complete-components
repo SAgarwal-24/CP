@@ -1,0 +1,73 @@
+//https://leetcode.com/problems/count-the-number-of-complete-components/
+
+// concepts - count edges , check graph is complete or not 
+
+class Solution {
+public:
+    
+    #define endl '\n' 
+    #define pb push_back
+    #define ff first
+    #define ss second
+    #define vi vector<int>
+    #define vvi vector<vi>
+    #define vd vector<double>
+    #define all(x) (x).begin(), (x).end()
+    #define sz(x) ((ll)(x).size())
+    #define watch(x) cout << (#x) << " -> "  << (x) << endl
+    
+    
+     void dfs(int node, int par,  map<int, vi> &adj, vi &vis, set<int>&nodeSet){
+         
+         vis[node] = 1;
+         nodeSet.insert(node);
+         
+         for(auto nbr: adj[node]){
+             
+             if(vis[nbr] == 0){
+                 dfs(nbr, node, adj, vis, nodeSet);             
+             }
+         }
+     }
+   
+    int countCompleteComponents(int n, vvi& edges) {
+        
+        map<int, vi> adj;
+        vi vis(n, 0);
+        
+        for(vi edge: edges){
+            int u = edge[0];
+            int v = edge[1];
+            
+            adj[u].pb(v);
+            adj[v].pb(u);
+        }
+        
+        int components = 0;
+        for(int node=0; node<n; node++){
+            
+            if(vis[node]==0){
+                set<int>nodeSet;
+                
+                dfs(node, -1, adj, vis, nodeSet);
+                
+                int edges = 0, componentSize = nodeSet.size();
+                
+                // count edges using adjacency nodes
+                for(auto componentNodes: nodeSet){
+                    edges += adj[componentNodes].size();
+                }
+                
+                edges /= 2;
+                
+                if(edges == (componentSize*(componentSize-1))/2  ){
+                    components ++;
+                }
+                
+                
+            }
+        }
+        
+        return components;
+    }
+};
