@@ -71,3 +71,59 @@ public:
         return components;
     }
 };
+
+/*
+// ------ implementation - 2 : counting edges and nodes inside dfs function only -------------
+
+void dfs(int node, int par,  map<int, vi> &adj, vi &vis, int &edges, int &componentSize){
+         
+        vis[node] = 1;
+        componentSize += 1;
+        edges += adj[node].size(); // count edges using adjacency nodes
+         
+        for(auto nbr: adj[node]){
+            
+            if(vis[nbr] == 0){
+                dfs(nbr, node, adj, vis, edges, componentSize);             
+            }
+        }
+     }
+   
+    int countCompleteComponents(int n, vvi& edges) {
+        
+        map<int, vi> adj;
+        vi vis(n, 0);
+        
+        for(vi edge: edges){
+            int u = edge[0];
+            int v = edge[1];
+            
+            adj[u].pb(v);
+            adj[v].pb(u);
+        }
+        
+        int components = 0;
+        for(int node=0; node<n; node++){
+            
+            if(vis[node]==1)
+                continue;
+            
+            int edges = 0, componentSize = 0;  // number of nodes in component
+            dfs(node, -1, adj, vis, edges, componentSize);
+        
+            edges /= 2; // each edge is counted twice so divide by 2
+            
+            if(edges == (componentSize*(componentSize-1))/2  ){
+                components ++;
+            }
+                
+                
+            
+        }
+        
+        return components;
+    }
+
+
+
+*/
