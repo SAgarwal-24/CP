@@ -1,4 +1,5 @@
 //https://leetcode.com/problems/count-the-number-of-complete-components/
+// dsu approach- https://leetcode.com/problems/count-the-number-of-complete-components/solutions/3521887/explained-dsu-very-simple-easy-to-understand/
 
 // concepts - count edges , check graph is complete or not 
 
