@@ -1,0 +1,81 @@
+/*
+
+link: https://leetcode.com/problems/minimum-cost-to-cut-a-stick
+helpful src: https://www.youtube.com/watch?v=xwomavsC86c 
+             https://leetcode.com/problems/minimum-cost-to-cut-a-stick/solution/
+
+1. Partition based DP-problem
+2.  Every time we perform a cut, we get two new sticks. We can use dynamic programming to solve these smaller fragments optimally, then combine their costs to find the answer to the original problem.
+
+3.  problem exhibits optimal substructure and overlapping subproblems, which makes it an ideal candidate for dynamic programming. 
+
+*/
+
+class Solution {
+public:
+    
+    #define pb push_back
+    #define ff first
+    #define ss second
+    #define vi vector<int>
+    #define all(x) (x).begin(), (x).end()
+    #define watch(x) cout << (#x) << " -> "  << (x) << endl
+    
+    int dp[102][102];
+    
+
+    int countCost(vi &cuts, int left, int right){ 
+       
+        
+        if(left>right){
+            return 0;
+        }
+        
+        if(dp[left][right] != -1){
+            return dp[left][right] ;
+        }
+        
+        int totalCost = INT_MAX, cost = 0;
+        
+        for(int cutIndex = left; cutIndex <= right; cutIndex++ ){ // O(m)
+            // recurrence relation
+            cost =  (cuts[right+1] - cuts[left-1]) + 
+                         countCost(cuts, left, cutIndex-1) +
+                         countCost(cuts, cutIndex+1, right);
+            
+            totalCost = min(totalCost, cost);
+        }
+        
+
+         return  dp[left][right] = totalCost;
+    }
+    
+    int minCost(int n, vi& cuts) { // Return the minimum total cost of the cuts.
+        
+        // cost of one cut is the length of the stick to be cut, 
+        //  the total cost is the sum of costs of all cuts.
+        
+        cuts.pb(0);
+        cuts.pb(n);
+        
+        sort(all(cuts));
+        
+        int si = cuts.size();
+        
+        memset(dp, -1, sizeof(dp));
+        
+        return countCost(cuts, 1, si-2);        
+        
+    }
+};
+/*
+
+Time complexity : O(m^3)  // m be the length of the input array cuts ( m<=100). 
+  - number of states in our DP is the number of possible combinations of (left, right), which is -> O(m^2) subproblems 
+  - For each subproblem cost(left, right), 
+        - we need to try all possible cutting positions between cuts[left] and cuts[right] - resulting in an additional factor of O(m)
+        
+        
+Space complexity: O(m^2) - We need to store the solutions for all (m^2)  subproblems in memory.
+
+*/
