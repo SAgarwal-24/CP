@@ -78,4 +78,10 @@ Time complexity : O(m^3)  // m be the length of the input array cuts ( m<=100).
         
 Space complexity: O(m^2) - We need to store the solutions for all (m^2)  subproblems in memory.
 
+
+Similar problems 
+1. https://leetcode.com/problems/burst-balloons/
+2 https://leetcode.com/problems/minimum-cost-to-merge-stones/
+3 https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
+
 */
