@@ -1,0 +1,85 @@
+//link - https://leetcode.com/problems/shortest-path-in-binary-matrix/
+ //Level order BFS traversal 
+ 
+class Solution {
+public:
+    
+    #define vi vector<int>
+    #define vvi vector<vi>
+    #define pii pair<int,int>
+    
+    int dx[8] = {0,1,1,1,0,-1,-1,-1};
+    int dy[8] = {1,1,0,-1,-1,-1,0,1};
+    
+    struct Cell {
+        int x;
+        int  y;
+    };
+    
+    bool isValid(Cell nxtCell, vvi &grid){
+        
+        int r = grid.size(), c = grid[0].size();
+        
+        int x = nxtCell.x,  y = nxtCell.y;
+        
+        return (x>=0 and x<r and y>=0 and y<c and (grid[x][y] == 0));
+        
+    }
+    
+    
+    
+    int shortestPathBinaryMatrix(vvi& grid) {
+     
+        int r = grid.size(), c = grid[0].size();
+        
+        if(grid[0][0] == 1){
+            return -1;
+        }
+        
+        
+        //Level order BFS traversal
+        
+        int steps=0, x=0, y=0, shortestPath=INT_MAX, len=0;
+        
+        queue<Cell>q;
+        
+        q.push({0,0});
+        grid[0][0] = -1;
+        while(!q.empty()){
+            
+            int numOfNodes = q.size();
+            steps ++;
+            
+            for(int j=0; j<numOfNodes; j++){
+                
+        
+                Cell cell = q.front();
+                q.pop();
+
+
+                // cout<<"( "<<cell.x<<","<<cell.y<<" ) ";
+
+                if(cell.x == r-1 && cell.y == c-1){
+                    shortestPath = min(shortestPath, steps);
+                }
+
+                for(int i=0; i<8; i++){
+                    Cell nxtCell = {cell.x + dx[i], cell.y + dy[i]};
+
+                    if(isValid(nxtCell, grid)){
+                        q.push(nxtCell);
+                        grid[nxtCell.x][nxtCell.y] = -1;
+                    }
+                }
+                
+            }
+           
+            
+            
+        }
+        
+        
+        return shortestPath == INT_MAX ? -1 :shortestPath ;
+        
+    }
+};
