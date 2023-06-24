@@ -1,0 +1,58 @@
+/*
+
+One of the golden - must do revision problem
+
+link - https://leetcode.com/problems/tallest-billboard/
+
+useful links 
+ - https://www.youtube.com/watch?v=805umyRq7cE
+ - https://leetcode.com/problems/tallest-billboard/discuss/3676944/a-simple-solution-for-the-fool-like-me/
+ 
+ 
+ - 0/1 knapsack with challenging dp implementation 
+ - challenge : to reduce number of dp states (avoid memory exhaustion)
+ -           : base case conditions. 
+ 
+
+*/
+
+class Solution {
+public:
+    
+    #define vi vector<int>
+    
+    int offset = 5000;
+    int dp[21][10001] ;
+    
+    // dp[i][diff] =
+    
+    int dfsForTallestBoard(vi& rods, int i, int diff){
+        
+        if(i == rods.size() ){
+            
+            if(diff == 0) 
+                return 0;
+            
+            return INT_MIN;  // if its not valid solution (so we want this solution to be dropped by returning - larget possible height as INT_MIN ie very big negative unwanted value) 
+        }
+        
+        if(dp[i][diff + offset] != 0){
+            return dp[i][diff + offset];
+        }
+        
+        int op1 = 0, op2 = 0, op3 = 0;
+        
+        op1 = dfsForTallestBoard(rods, i+1, diff); // skip
+        op2 = rods[i] + dfsForTallestBoard(rods, i+1, diff + rods[i]); //include (added in 1st support)
+        op3 = dfsForTallestBoard(rods, i+1, diff - rods[i]);    //remove  (added in 2nd support)
+        
+        return  dp[i][diff + offset] = max( {op1, op2, op3} );
+    }
+    
+    int tallestBillboard(vi& rods) {
+        
+        memset(dp, 0, sizeof(dp));
+        
+        return max( 0,  dfsForTallestBoard(rods, 0, 0));
+    }
+};
