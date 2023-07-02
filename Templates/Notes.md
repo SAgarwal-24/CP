@@ -1,4 +1,4 @@
-Print permutations of a given string using backtracking:
+#### Print permutations of a given string using backtracking:
 ![file](https://github.com/SAgarwal-24/CP/assets/44989343/684b8b42-6b70-49d5-a289-8b8eba613b8d)
 
 ```
@@ -25,7 +25,7 @@ void permute(string& a, int l, int r)
 ```
 
 
-Permutation when repetition is allowed
+#### Permutation when repetition is allowed
 
 ```
 We can easily calculate the permutation with repetition. The permutation with repetition of objects can be written using the exponent form.
