@@ -1,0 +1,62 @@
+/*
+
+link - https://leetcode.com/problems/put-marbles-in-bags
+
+helpful - https://www.youtube.com/watch?v=RyJpH8cghrE
+
+
+ 1. why dp not possible
+ 2. greedy solution and reasoning
+ 3. how to think in terms of partitions
+ 
+ 
+*/
+
+class Solution {
+public:
+    
+    #define ll long long 
+    #define pb push_back
+    #define vi vector<int>
+    #define vvi vector<vi>
+    #define all(x) (x).begin(), (x).end()
+    #define sz(x) ((ll)(x).size())
+    #define watch(x) cout << (#x) << " -> "  << (x) << endl
+    
+    long long putMarbles(vi& wt, int k) {
+        
+        int i, n = wt.size();
+        
+        
+        ll score = 0;
+        
+        // score - cost of all 'k' bags 
+        
+        // n-1 -> total partitions possible
+        // out of which -> we will take (k-1) partitions
+        
+        vi allPossibleCosts; // allPossibleCosts by partitions
+        for(i=0; i+1<n; i++){
+            
+            // cost contributed by one partition
+            int costContributed = wt[i] + wt[i+1];
+            
+            // watch(costContributed);
+            allPossibleCosts.pb(costContributed);
+            
+        }
+        
+        sort(all(allPossibleCosts));
+        
+        ll  mxScore = 0, minScore = 0;
+        
+        for(i=0; i<k-1; i++){
+            minScore += allPossibleCosts[i];
+            mxScore  += allPossibleCosts[(n-1)-i-1];
+        }
+        
+        score = mxScore - minScore;
+        
+        return score;
+    }
+};
