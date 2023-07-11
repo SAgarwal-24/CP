@@ -40,3 +40,8 @@ n × n × n × ……(r times) = nr
 
 This is the permutation formula to compute the number of permutations feasible for the choice of “r” items from the “n” objects when repetition is allowed.
 ```
+
+### Important Leetcode Posts
+```
+1. Number Theory (Prime nos.) -> https://leetcode.com/discuss/study-guide/3735417/topics-which-you-cant-skip-interview-preparation-part-1
+```
