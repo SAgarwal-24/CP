@@ -1,4 +1,5 @@
-#### erase() function is used to erase elements from the unordered_map. There are three type of erase functions supported by unordered_map : erasing by iterator: It takes an iterator as a parameter and erases the key and value present at that iterator. unordered_map.
+## erase() function - delete elements from unordered_map
+#### is used to erase elements from the unordered_map. There are three type of erase functions supported by unordered_map : erasing by iterator: It takes an iterator as a parameter and erases the key and value present at that iterator. unordered_map.
 
 https://www.geeksforgeeks.org/unordered_map-erase-in-c-stl/
 
@@ -60,6 +61,46 @@ int main()
 	return 0;
 }
 
+
+```
+
+## Last element of vector in C++ (Accessing and updating)
+####  Using back() We can access and modify last value using back().
+#### vector::front()  -> This function can be used to fetch the first element of a vector container.
+
+```
+vectorname.front()
+Parameters :
+No value is needed to pass as the parameter.
+Returns :
+Direct reference to the first element of the vector container.
+
+vectorname.back()
+Parameters :
+No value is needed to pass as the parameter.
+Returns :
+Direct reference to the last element of the vector container.
+
+```
+
+```
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	vector<int> v{10, 20, 30, 40, 50};
+	
+	// Accessing last element
+	cout << v.back() << endl;
+
+	// modifying last element
+	v.back() = 100;
+
+	cout << v.back() << endl;
+        cout << v.front();
+	return 0;
+}
 
 ```
 
