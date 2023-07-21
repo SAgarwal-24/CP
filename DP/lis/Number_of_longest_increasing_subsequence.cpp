@@ -1,6 +1,8 @@
 /*
 link - https://leetcode.com/problems/number-of-longest-increasing-subsequence/
 
+(interview type question)
+
 recommended problems by leetcode
  - https://leetcode.com/problems/longest-increasing-subsequence-ii/
  - https://leetcode.com/problems/longest-continuous-increasing-subsequence/
