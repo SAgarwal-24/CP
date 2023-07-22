@@ -43,5 +43,6 @@ This is the permutation formula to compute the number of permutations feasible f
 
 ### Important Leetcode Posts
 1. [Number Theory (Prime nos. etc) - TOPICS WHICH YOU CAN'T SKIP | INTERVIEW PREPARATION | Part 1](https://leetcode.com/discuss/study-guide/3735417/topics-which-you-cant-skip-interview-preparation-part-1)
+2. Important and Useful links from all over the LeetCode - https://leetcode.com/discuss/general-discussion/665604/Important-and-Useful-links-from-all-over-the-LeetCode
 
 
