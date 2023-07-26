@@ -105,7 +105,6 @@ int main()
 ```
 
 ### Convert Int to Double in C++
-learings
  - double and int - promotion  - https://stackoverflow.com/questions/13663545/does-one-double-promote-every-int-in-the-equation-to-double
  - https://en.cppreference.com/w/cpp/language/operator_precedence
  - https://linuxhint.com/convert-int-double-cpp/ (Two Categories of Conversion in C++ - Implicit Type Conversion, Explicit Type Conversion)
