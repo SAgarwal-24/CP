@@ -8,6 +8,8 @@ helpful - https://leetcode.com/problems/search-in-rotated-sorted-array/discuss/1
 
 2. and other approach(below) is without finding pivot
 
+3. Observe - all numbers are unique (important point to keep in mind) - for thinking approach and conditions
+
 */
 
 class Solution {
