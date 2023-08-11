@@ -1,3 +1,15 @@
+/*
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+
+helpful - https://leetcode.com/problems/search-in-rotated-sorted-array/discuss/14436/Revised-Binary-Search
+
+1. one approach is find pivot and then search sepreately - https://leetcode.com/submissions/detail/756039042/
+
+2. and other approach(below) is without finding pivot
+
+*/
+
 class Solution {
 public:
     
