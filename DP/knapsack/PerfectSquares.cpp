@@ -5,6 +5,7 @@ memoization approach was bit different
 - so check it out - https://leetcode.com/problems/perfect-squares/discuss/3824644/
 - in memoization - instead of following - take and don't take - standard recursion
 - its better to follow - to take all possible - ie take and only take :)
+- basically since it is - unbounded knapsack - we can repeat element - ie take again and again 
 
 int numSquares(int n) {
         vector<int> memo(n + 1, -1);
