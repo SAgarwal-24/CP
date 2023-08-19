@@ -6,6 +6,7 @@ using namespace std;
 #define pb push_back
 #define ff first
 #define ss second
+#define pii pair<int,int>
 #define vi vector<int>
 #define vvi vector<vi>
 #define vd vector<double>
