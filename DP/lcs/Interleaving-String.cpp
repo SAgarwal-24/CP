@@ -13,6 +13,9 @@ Space optimized idea:
   Therefore, while iterating through the strings, the current state only depends on the states in the previous row of the 2D DP array, 
   which means we can optimize our space complexity by just keeping track of one row (1D DP).
 
+Recurrence
+ 
+memo[x][y] = represent whether substring s3[x][y] can be formed by interleaving s1[x] and s2[y] 
 
 f(x, y) =  f(x+1, y) ,  s1[x] == s3[x+y]
            f(x, y+1) ,  s2[y] == s3[x+y]
