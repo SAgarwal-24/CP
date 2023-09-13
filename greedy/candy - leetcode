@@ -84,6 +84,69 @@ public:
         
     }
 };
+
+//--------------------------------------------- 2023 code ----------
+
+/*
+
+/*
+
+
+
+Challenging intution
+
+- in order to simplify - complex requirement of question
+  of comparing rating from both left and right neighbours 
+  which can be done in separate traversal 
+  
+- and then compare which rating will satisfy our requirements
+  
+ 
+
+*/
+
+
+
+class Solution {
+public:
+
+    #define vi vector<int>
+      
+    int candy(vi& ratings) {
+        
+        int  n = ratings.size(), minCandies = 0;
+        
+        vi canyLeftNbr(n, 1), candyRightNbr(n, 1);
+        
+        for(int l=0; l<n; l++){
+            
+            int r = n-1-l;
+            
+            // candies acc. to left nbr
+            if(l-1 >= 0 && ratings[l-1] < ratings[l]){
+                canyLeftNbr[l] = canyLeftNbr[l-1] + 1;
+            }
+            
+            // candies acc. to right nbr
+            if(r+1 < n && ratings[r] > ratings[r+1]){
+                candyRightNbr[r] = candyRightNbr[r+1] + 1;
+            }
+        }
+        
+        for(int i=0; i<n; i++){
+            minCandies += max(candyRightNbr[i], canyLeftNbr[i]);
+        }
+        
+        return minCandies;
+    }
+};
+
+
+
+
+
+*/
+
 /*
 [1,0,2]
 [1,2,2]
