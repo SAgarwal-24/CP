@@ -6,6 +6,9 @@ If we analyse time complexity properly
  - idea of binary search will hit instantly :)
  - otherwise we will waste time with - backtracking and dfs :(
 
+other way is - dikstra check that too
+ - https://leetcode.com/problems/path-with-minimum-effort/discuss/4049576/99.92-oror-Dijkstra's-Algorithm-oror-Binary-Search-oror-Commented-Code
+
 */
 
 class Solution {
