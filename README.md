@@ -1,3 +1,18 @@
+
+### What is Dijkstra's Algorithm
+```
+ Dijkstra's Algorithm is -> an algorithm to find the shortest path between two nodes in a graph or two cells in a matrix like our problem.
+It's part of a family of algorithms designed to uncover the shortest path between nodes or cells like BFS, Bellman-Ford Algorithm, Floyd-Warsahll Algorithm. Each algorithm has its unique applications.
+
+Let's focus on Dijkstra's Algorithm:
+  Nature: It's a single-source, multiple-destination algorithm. In simpler terms, it pinpoints the shortest path from a starting node to any other node in our graph.
+
+  Constraints: Dijkstra's Algorithm is suitable for graphs or problems featuring positive weights. If we encounter negative weights, we'd choose alternative algorithms such as Bellman-Ford.
+
+https://leetcode.com/problems/path-with-minimum-effort/discuss/4049576/99.92-oror-Dijkstra's-Algorithm-oror-Binary-Search-oror-Commented-Code
+```
+
+
 # DSU MY TEMPLATE
 
 ```
