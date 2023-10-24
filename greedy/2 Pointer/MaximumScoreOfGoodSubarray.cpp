@@ -1,3 +1,12 @@
+/*
+
+https://leetcode.com/problems/maximum-score-of-a-good-subarray/
+
+https://leetcode.com/problems/maximum-score-of-a-good-subarray/discuss/1108333/JavaC++Python-Two-Pointers/876995
+
+*/
+
+
 #define pb push_back
 #define ff first
 #define ss second
