@@ -1,4 +1,35 @@
-### Priorty_Queue_Custom_Comparator
+### Custom Comparator in priority_queue (In general)
+
+ #### Syntax
+ 	
+ 	priority_queue<data_type, container, comparator> ds;
+
+	1. data_type (mandatory) 
+	2. container (optional) 
+	3. comparator (optional) 
+	
+  
+ #### The Characteristics of the heap data structure are:
+	- O(1) or constant time retrieval of min/max in the list.
+ 	- O(log N) time for insertion and deletion.
+
+```
+class Compare {
+    public:
+       bool operator()(T a, T b){
+           if(cond){
+               return true;
+           }
+           return false;
+      }
+};
+```
+1. You should declare a class Compare and overload operator() function.
+2. When true is returned, it means the order is NOT correct and swapping of elements takes place.
+3. When false is returned, it means the order is correct and NO swapping of elements takes place.
+
+
+### Priorty_Queue_Custom_Comparator_User_Defined_Class
 - https://www.geeksforgeeks.org/implement-min-heap-using-stl/
 ```
 /*
