@@ -1,6 +1,11 @@
 ### Priorty_Queue_Custom_Comparator
 - https://www.geeksforgeeks.org/implement-min-heap-using-stl/
 ```
+/*
+How to make a min-heap of user-defined class? 
+Let us consider below example where we build a min-heap of 2 D points ordered by X-axis.
+*/
+
 // C++ program to use priority_queue to implement Min Heap 
 // for user defined class 
 #include <bits/stdc++.h> 
