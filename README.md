@@ -45,16 +45,17 @@ using namespace std;
 // User defined class, Point 
 class Point 
 { 
-int x; 
-int y; 
+	int x; 
+	int y; 
 public: 
-Point(int x, int y) 
-{ 
-	this->x = x; 
-	this->y = y; 
-} 
-int getX() const { return x; } 
-int getY() const { return y; } 
+	Point(int x, int y) 
+	{ 
+		this->x = x; 
+		this->y = y; 
+	}
+
+	int getX() const { return x; } 
+	int getY() const { return y; } 
 }; 
 
 // To compare two points 
